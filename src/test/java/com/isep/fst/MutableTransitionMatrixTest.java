@@ -19,19 +19,28 @@ public class MutableTransitionMatrixTest {
 
     @Test
     public void testAddStateHasStatesGetStates() {
-        assertEquals(transitionMatrix.getNumberOfStates(), 1);
+        assertEquals(1, transitionMatrix.getNumberOfStates());
         assertTrue(transitionMatrix.hasState(0));
         assertFalse(transitionMatrix.hasState(1));
 
         int newState = transitionMatrix.addState();
 
-        assertEquals(transitionMatrix.getNumberOfStates(), 2);
-        assertTrue(transitionMatrix.hasState(0));
-        assertTrue(transitionMatrix.hasState(newState));
+        assertEquals(2, transitionMatrix.getNumberOfStates());
+        assertEquals(1, newState);
         assertTrue(transitionMatrix.hasState(0));
         assertTrue(transitionMatrix.hasState(1));
 
-        assertArrayEquals(transitionMatrix.getStates(), new int[]{0, 1});
+        assertArrayEquals(new int[]{0, 1}, transitionMatrix.getStates());
+
+        newState = transitionMatrix.addState();
+
+        assertEquals(3, transitionMatrix.getNumberOfStates());
+        assertEquals(2, newState);
+        assertTrue(transitionMatrix.hasState(0));
+        assertTrue(transitionMatrix.hasState(1));
+        assertTrue(transitionMatrix.hasState(2));
+
+        assertArrayEquals(new int[]{0, 1, 2}, transitionMatrix.getStates());
     }
 
     @Test

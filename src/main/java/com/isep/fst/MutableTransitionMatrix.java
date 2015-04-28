@@ -22,9 +22,8 @@ public class MutableTransitionMatrix {
     }
 
     public int addState() {
-        int newState = lastState + 1;
-        matrix.put(newState, new HashMap<>());
-        return newState;
+        matrix.put(++lastState, new HashMap<>());
+        return lastState;
     }
 
     public MutableTransitionMatrix addTransition(int source, char letter, int target) {
