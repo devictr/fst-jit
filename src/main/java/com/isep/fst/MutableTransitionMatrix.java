@@ -1,6 +1,8 @@
 package com.isep.fst;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by devict on 27/04/15.
@@ -61,10 +63,7 @@ public class MutableTransitionMatrix {
     }
 
     public ArrayList<Character> getLetters() {
-        return this.letters;
+        return matrix.values().stream().flatMap(m -> m.keySet().stream()).collect(Collectors.toCollection(ArrayList<Character>::new));
     }
 
-    public char getTarget(char source, char letter) {
-        return 0;
-    }
 }
