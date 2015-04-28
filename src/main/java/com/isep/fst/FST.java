@@ -51,7 +51,7 @@ public class FST {
     }
 
     public char getTarget(char source, char letter) {
-        return transitionMatrix.getTarget(source, letter);
+        return 0;
     }
 
     public Object getOutputs(int state) {

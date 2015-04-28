@@ -1,5 +1,7 @@
 package com.isep.fst;
 
+import com.rits.cloning.Cloner;
+
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ public class MutableTransitionMatrix {
     public MutableTransitionMatrix(int initialState) {
         this.lastState = initialState;
         this.matrix = new HashMap<Integer, HashMap<Character, Integer>>();
+        this.matrix.put(initialState, new HashMap<Character, Integer>());
     }
 
     public int addState() {
@@ -29,12 +32,24 @@ public class MutableTransitionMatrix {
         return this;
     }
 
+    /**
+     *
+     * @param source
+     * @param letter
+     * @return int target state if it exists. <br/> Otherwise -1
+     */
     public int getTarget(int source, char letter) {
         HashMap<Character, Integer> successors = matrix.get(source);
         if (successors == null) {
             throw new RuntimeException("Unknown source state : " + source);
         }
-        return successors.get(letter);
+        int target;
+        try {
+            target = successors.get(letter);
+        } catch (NullPointerException e) {
+            return -1;
+        }
+        return target;
     }
 
     public HashMap<Character, Integer> getTransitions(int source) {
@@ -54,7 +69,8 @@ public class MutableTransitionMatrix {
     }
 
     public int[] getStates() {
-        Integer[] states = (Integer[]) matrix.keySet().toArray();
+        Set<Integer> integers = matrix.keySet();
+        Integer[] states = integers.toArray(new Integer[integers.size()]);
         int[] unboxedStates = new int[states.length];
         for (int i = 0; i < states.length; i++) {
             unboxedStates[i] = Integer.valueOf(states[i]);
@@ -64,6 +80,11 @@ public class MutableTransitionMatrix {
 
     public ArrayList<Character> getLetters() {
         return matrix.values().stream().flatMap(m -> m.keySet().stream()).collect(Collectors.toCollection(ArrayList<Character>::new));
+    }
+
+    public HashMap<Integer, HashMap<Character, Integer>> getMap() {
+        Cloner cloner = new Cloner();
+        return cloner.deepClone(matrix);
     }
 
 }
