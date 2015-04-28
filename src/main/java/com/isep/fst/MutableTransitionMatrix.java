@@ -17,13 +17,13 @@ public class MutableTransitionMatrix {
 
     public MutableTransitionMatrix(int initialState) {
         this.lastState = initialState;
-        this.matrix = new HashMap<Integer, HashMap<Character, Integer>>();
-        this.matrix.put(initialState, new HashMap<Character, Integer>());
+        this.matrix = new HashMap<>();
+        this.matrix.put(initialState, new HashMap<>());
     }
 
     public int addState() {
         int newState = lastState + 1;
-        matrix.put(newState, new HashMap<Character, Integer>());
+        matrix.put(newState, new HashMap<>());
         return newState;
     }
 
