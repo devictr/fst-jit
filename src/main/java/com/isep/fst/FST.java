@@ -1,5 +1,6 @@
 package com.isep.fst;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -43,5 +44,17 @@ public class FST {
             throw new FSTException("Unknown state : " + state);
         }
         return finalStates.contains(state);
+    }
+
+    public ArrayList<Character> getLetters() {
+        return transitionMatrix.getLetters();
+    }
+
+    public char getTarget(char source, char letter) {
+        return transitionMatrix.getTarget(source, letter);
+    }
+
+    public Object getOutputs(int state) {
+        return null;
     }
 }
