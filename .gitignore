@@ -12,6 +12,8 @@
 hs_err_pid*
 
 # IDE Files
-
 *.iml
 .idea
+
+# OS X Files
+.DS_Store
