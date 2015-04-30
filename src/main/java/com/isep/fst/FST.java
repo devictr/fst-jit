@@ -1,8 +1,6 @@
 package com.isep.fst;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Victor Delépine on 27/04/15.
@@ -10,13 +8,13 @@ import java.util.List;
 public class FST {
 
     private int initialState;
-    private MutableTransitionMatrix transitionMatrix;
-    private List<? extends Comparable> finalStates;
-    private List<? extends Comparable> outputs;
+    protected MutableTransitionMatrix transitionMatrix;
+    protected Set<? extends Comparable> finalStates;
+    protected Map<? extends Comparable, Set<String>> outputs;
 
     public FST(int initialState, MutableTransitionMatrix transitionMatrix,
-               List<? extends Comparable> finalStates,
-               List<? extends Comparable> outputs) {
+               Set<? extends Comparable> finalStates,
+               Map<? extends Comparable, Set<String>> outputs) {
         this.initialState = initialState;
         this.transitionMatrix = transitionMatrix;
         this.finalStates = finalStates;
@@ -35,8 +33,7 @@ public class FST {
         return initialState;
     }
 
-    public List<? extends Comparable> getFinalStates() {
-        Collections.sort(finalStates);
+    public Set<? extends Comparable> getFinalStates() {
         return finalStates;
     }
 

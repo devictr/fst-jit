@@ -72,7 +72,7 @@ public class MutableTransitionMatrix {
         Integer[] states = integers.toArray(new Integer[integers.size()]);
         int[] unboxedStates = new int[states.length];
         for (int i = 0; i < states.length; i++) {
-            unboxedStates[i] = Integer.valueOf(states[i]);
+            unboxedStates[i] = states[i];
         }
         return unboxedStates;
     }
