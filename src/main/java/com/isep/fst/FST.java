@@ -9,12 +9,12 @@ public class FST {
 
     private int initialState;
     protected MutableTransitionMatrix transitionMatrix;
-    protected Set<? extends Comparable> finalStates;
-    protected Map<? extends Comparable, Set<String>> outputs;
+    protected Set<Integer> finalStates;
+    protected Map<Integer, Set<String>> outputs;
 
     public FST(int initialState, MutableTransitionMatrix transitionMatrix,
-               Set<? extends Comparable> finalStates,
-               Map<? extends Comparable, Set<String>> outputs) {
+               Set<Integer> finalStates,
+               Map<Integer, Set<String>> outputs) {
         this.initialState = initialState;
         this.transitionMatrix = transitionMatrix;
         this.finalStates = finalStates;

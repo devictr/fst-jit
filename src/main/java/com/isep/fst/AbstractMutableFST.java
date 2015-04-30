@@ -1,9 +1,7 @@
 package com.isep.fst;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Created by Victor Delépine on 27/04/15.
@@ -15,5 +13,11 @@ public class AbstractMutableFST extends FST {
         super(initialState, transitionMatrix, new HashSet<>(), new HashMap<>());
     }
 
-
+    public FST setFinalState(int state) throws FSTException {
+        if (!this.transitionMatrix.hasState(state)) {
+            throw new FSTException("Unknown state " + state);
+        }
+        this.finalStates.add(state);
+        return this;
+    }
 }
