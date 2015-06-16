@@ -13,3 +13,11 @@ hs_err_pid*
 
 # c and assembly
 fst
+
+# report latex
+*.aux
+*.log
+*.lol
+*.lot
+*.out
+*.toc
