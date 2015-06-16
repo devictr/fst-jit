@@ -21,6 +21,25 @@ compute_fst:
 
 EOF
 
+while read DEP ARR CHAR WEIGHT ; do
+    : ${WEIGHT:=0}
+
+    if [[ $DEP != $PREV_DEP ]]; then
+        cat <<EOF
+.NODE_$DEP:
+	addl	\$1, -8(%rbp)   # pos++
+	movl	-8(%rbp), %eax  # eax = pos
+	leaq	-1(%rax), %rdx  # rdx = pos - 1
+	movq	-24(%rbp), %rax # load token (address) in rax
+	addq	%rdx, %rax      # rax = &(token[pos-1])
+	movzbl	(%rax), %eax    # eax = token[pos-1]
+
+EOF
+    fi
+
+    PREV_DEP=$DEP
+done < "$FST.sort"
+
 cat <<EOF
 .RET:
 	popq	%rbp
