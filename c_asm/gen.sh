@@ -13,6 +13,20 @@ int total=0;
 EOF
 
 while read DEP ARR CHAR WEIGHT ; do
+    # If it's a final node
+    if [[ ! "$CHAR" ]]; then
+        WEIGHT=${ARR:-0}
+        cat <<EOF
+    }
+
+NODE_$DEP :
+    total += $WEIGHT;
+    goto END;
+EOF
+
+        continue
+    fi
+
     : ${WEIGHT:=0}
 
     if [[ $DEP != $PREV_DEP ]]; then
@@ -39,5 +53,11 @@ EOF
     PREV_DEP=$DEP
     FIRST_CALL=
 done < "$FST.sort"
+
+cat <<EOF
+
+END :
+    return total;
+EOF
 
 rm "$FST.sort"
