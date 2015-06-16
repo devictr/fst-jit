@@ -19,5 +19,9 @@ fst
 *.log
 *.lol
 *.lot
+*.lof
 *.out
 *.toc
+
+# vim
+*.swp
