@@ -1,4 +1,4 @@
-To use this, choose an existing .fst file (or write a new one). 
+To use this, choose an existing .fst file (or write a new one).
 
 ./gen.sh 1.fst | gcc -x c -o fst -
 
