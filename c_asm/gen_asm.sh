@@ -14,9 +14,9 @@ cat <<EOF
 	.type	compute_fst, @function
 
 compute_fst:
-	pushq	%rbp             # remember old base pointer
-	movq	%rsp, %rbp       # set new base pointer
-	movq	%rdi, -24(%rbp)  # put content of rdi (token) in -24(%rbp)
+	pushq	%rbp            # remember old base pointer
+	movq	%rsp, %rbp      # set new base pointer
+	movq	%rdi, -24(%rbp) # put content of rdi (token) in -24(%rbp)
 	movl	\$0, -8(%rbp)    # pos   (-8(%rbp)) = 0
 	movl	\$0, -4(%rbp)    # total (-4(%rbp)) = 0
 
@@ -34,7 +34,7 @@ while read DEP ARR CHAR WEIGHT ; do
 EOF
     (( WEIGHT != 0 )) &&
         echo "	addl  \$$WEIGHT, -4(%rbp)         # total += Weight"
-    echo "	jmp .END          # goto END"
+    echo "	jmp .END                # goto END"
 
         continue
     fi
@@ -59,7 +59,7 @@ EOF
 
         cat <<EOF
 .NODE_$DEP:
-	addl	\$1, -8(%rbp)   # pos++
+	addl	\$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
@@ -71,13 +71,13 @@ EOF
 
     printf -v CHAR_INT '%d' "\"$CHAR"
 
-    echo "	cmpl \$$CHAR_INT, %eax      # case '$CHAR'"
+    echo "	cmpl \$$CHAR_INT, %eax          # case '$CHAR'"
 
     if (( WEIGHT != 0 )) ; then
         echo "	je .NODE_${DEP}_$CHAR"
         tmp+=(
             ".NODE_${DEP}_$CHAR:"
-            "	addl  \$$WEIGHT, -4(%rbp)         # total += $WEIGHT"
+            "	addl  \$$WEIGHT, -4(%rbp)      # total += $WEIGHT"
             "	jmp .NODE_$ARR"
             ""
             )
@@ -110,13 +110,13 @@ main:
 	subq	\$16, %rsp
 	movl	%edi, -4(%rbp)
 	movq	%rsi, -16(%rbp)
-	cmpl	\$1, -4(%rbp)       # if (argc < 2)
+	cmpl	\$1, -4(%rbp)        # if (argc < 2)
 	jg	.DO_MAIN
-	movl	\$1, %eax           # return 1;
+	movl	\$1, %eax            # return 1;
 	jmp	.END_MAIN
 .DO_MAIN:
 	movq	-16(%rbp), %rax     # rax = &(argv[0])
-	addq	\$8, %rax           # rax = &(argv[1])
+	addq	\$8, %rax            # rax = &(argv[1])
 	movq	(%rax), %rax        # rax = argv[1]
 	movq	%rax, %rdi          # rdi = argv[1]
 	call	compute_fst
