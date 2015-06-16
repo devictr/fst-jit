@@ -7,8 +7,10 @@ sort "$FST" > "$FST.sort"
 FIRST_CALL=1
 
 cat <<EOF
-int pos=0;
-int total=0;
+int compute_fst(const char* token)
+{
+    int pos=0;
+    int total=0;
 
 EOF
 
@@ -58,6 +60,7 @@ cat <<EOF
 
 END :
     return total;
+}
 EOF
 
 rm "$FST.sort"
