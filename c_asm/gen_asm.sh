@@ -50,6 +50,9 @@ EOF
 done < "$FST.sort"
 
 cat <<EOF
+
+.END:
+	movl    -4(%rbp), %eax  # Put return value in eax
 .RET:
 	popq	%rbp
 	ret
