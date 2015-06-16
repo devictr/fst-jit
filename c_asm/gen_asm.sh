@@ -25,6 +25,14 @@ while read DEP ARR CHAR WEIGHT ; do
     : ${WEIGHT:=0}
 
     if [[ $DEP != $PREV_DEP ]]; then
+        if [[ ! "$FIRST_CALL" ]]; then
+            cat <<EOF
+	movl \$-1, %eax          # default : return -1
+	jmp .RET
+
+EOF
+        fi
+
         cat <<EOF
 .NODE_$DEP:
 	addl	\$1, -8(%rbp)   # pos++
@@ -38,6 +46,7 @@ EOF
     fi
 
     PREV_DEP=$DEP
+    FIRST_CALL=
 done < "$FST.sort"
 
 cat <<EOF
