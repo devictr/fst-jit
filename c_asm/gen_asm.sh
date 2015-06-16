@@ -110,17 +110,17 @@ main:
 	subq	\$16, %rsp
 	movl	%edi, -4(%rbp)
 	movq	%rsi, -16(%rbp)
-	cmpl	\$1, -4(%rbp)
+	cmpl	\$1, -4(%rbp)       # if (argc < 2)
 	jg	.DO_MAIN
-	movl	\$1, %eax
+	movl	\$1, %eax           # return 1;
 	jmp	.END_MAIN
 .DO_MAIN:
-	movq	-16(%rbp), %rax
-	addq	\$8, %rax
-	movq	(%rax), %rax
-	movq	%rax, %rdi
+	movq	-16(%rbp), %rax     # rax = &(argv[0])
+	addq	\$8, %rax           # rax = &(argv[1])
+	movq	(%rax), %rax        # rax = argv[1]
+	movq	%rax, %rdi          # rdi = argv[1]
 	call	compute_fst
-	movl	%eax, %esi
+	movl	%eax, %esi          # esi = compute_fst()
 	movl	\$.PRINTF_FMT, %edi
 	movl	\$0, %eax
 	call	printf
