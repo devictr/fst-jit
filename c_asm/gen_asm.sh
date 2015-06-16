@@ -1,6 +1,7 @@
 #!/bin/bash
 
 FST="$1"
+oIFS=$IFS
 
 sort "$FST" > "$FST.sort"
 
@@ -49,6 +50,13 @@ EOF
 EOF
         fi
 
+        if [[ ${#tmp[@]} != 0 ]] ; then
+            IFS=$'\n'
+            echo "${tmp[*]}"
+            IFS=$oIFS
+            tmp=()
+        fi
+
         cat <<EOF
 .NODE_$DEP:
 	addl	\$1, -8(%rbp)   # pos++
@@ -66,7 +74,13 @@ EOF
     echo "	cmpl \$$CHAR, %eax      # case '$CHAR'"
 
     if (( WEIGHT != 0 )) ; then
-        # TODO
+        echo "	je .NODE_${DEP}_$CHAR"
+        tmp+=(
+            ".NODE_${DEP}_$CHAR:"
+            "	addl  \$$WEIGHT, -4(%rbp)         # total += $WEIGHT"
+            "	jmp .NODE_$ARR"
+            ""
+            )
     else
         echo "	je .NODE_$ARR"
     fi
