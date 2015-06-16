@@ -69,9 +69,9 @@ EOF
 EOF
     fi
 
-    printf -v CHAR '%d' "\"$CHAR"
+    printf -v CHAR_INT '%d' "\"$CHAR"
 
-    echo "	cmpl \$$CHAR, %eax      # case '$CHAR'"
+    echo "	cmpl \$$CHAR_INT, %eax      # case '$CHAR'"
 
     if (( WEIGHT != 0 )) ; then
         echo "	je .NODE_${DEP}_$CHAR"
