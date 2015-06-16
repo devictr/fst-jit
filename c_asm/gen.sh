@@ -4,6 +4,8 @@ FST="$1"
 
 sort "$FST" > "$FST.sort"
 
+FIRST_CALL=1
+
 cat <<EOF
 int pos=0;
 int total=0;
@@ -14,9 +16,14 @@ while read DEP ARR CHAR WEIGHT ; do
     : ${WEIGHT:=0}
 
     if [[ $DEP != $PREV_DEP ]]; then
-        cat <<EOF
+        if [[ ! "$FIRST_CALL" ]]; then
+            cat <<EOF
     }
 
+EOF
+        fi
+
+        cat <<EOF
 NODE_$DEP :
     pos++;
     switch (token[pos-1]) {
@@ -30,6 +37,7 @@ EOF
 EOF
 
     PREV_DEP=$DEP
+    FIRST_CALL=
 done < "$FST.sort"
 
 rm "$FST.sort"
