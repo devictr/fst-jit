@@ -45,6 +45,16 @@ EOF
 EOF
     fi
 
+    printf -v CHAR '%d' "\"$CHAR"
+
+    echo "	cmpl \$$CHAR, %eax      # case '$CHAR'"
+
+    if (( WEIGHT != 0 )) ; then
+        # TODO
+    else
+        echo "	je .NODE_$ARR"
+    fi
+
     PREV_DEP=$DEP
     FIRST_CALL=
 done < "$FST.sort"
