@@ -19,6 +19,8 @@ while read DEP ARR CHAR WEIGHT ; do
     if [[ ! "$CHAR" ]]; then
         WEIGHT=${ARR:-0}
         cat <<EOF
+    default:
+        return -1;
     }
 
 NODE_$DEP :
@@ -34,6 +36,8 @@ EOF
     if [[ $DEP != $PREV_DEP ]]; then
         if [[ ! "$FIRST_CALL" ]]; then
             cat <<EOF
+    default:
+        return -1;
     }
 
 EOF
