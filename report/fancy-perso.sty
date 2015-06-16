@@ -1,0 +1,53 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{fancy-perso}{}
+\RequirePackage{fancyhdr,pgffor,boolexpr}
+
+\def\headerleft#1{\def\@headerleft{#1}}
+\def\headerright#1{\def\@headerright{#1}}
+\def\footerleft#1{\def\@footerleft{#1}}
+\def\footercenter#1{\def\@footercenter{#1}}
+\def\footerright#1{\def\@footerright{#1}}
+
+\long\def\isequal#1#2{\pdf@strcmp{#1}{#2}}
+
+\newcommand{\fancyperso}[5] {
+    \pagestyle{fancy}
+    \renewcommand\headrulewidth{0.5pt}
+    \renewcommand\footrulewidth{0.5pt}
+
+    \def\@first{#1}
+    \def\@second{#2}
+    \def\@third{#3}
+    \def\@fourth{#4}
+    \def\@fifth{#5}
+
+    \fancyhead[L]{}
+    \fancyhead[R]{}
+    \fancyfoot[L]{}
+    \fancyfoot[C]{}
+    \fancyfoot[R]{}
+
+    \foreach \arg in {\@first,\@second,\@third,\@fourth,\@fifth} {
+        \switch
+        \case{\isequal{\arg}{HL}}
+        \fancyhead[L]{\@headerleft}
+        \case{\isequal{\arg}{HR}}
+        \fancyhead[R]{\@headerright}
+        \case{\isequal{\arg}{FL}}
+        \fancyfoot[L]{\@footerleft}
+        \case{\isequal{\arg}{FC}}
+        \fancyfoot[C]{\@footercenter}
+        \case{\isequal{\arg}{FR}}
+        \fancyfoot[R]{\@footerright}
+        \case{\isequal{\arg}{}}
+        \otherwise
+        \PackageError{}{
+            \MessageBreak
+            value > \arg < unkown\MessageBreak
+            possible values are: HL, HR, FL, FC, FR.\MessageBreak
+        }{}
+        \endswitch
+    }
+}
+
+\endinput

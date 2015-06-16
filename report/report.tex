@@ -1,0 +1,103 @@
+\input{preamble.tex}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\clearpage
+\pagenumbering{Roman}
+\setcounter{page}{1}
+\footercenter{\textbf{\thepage}}
+\fancyperso{HL}{HR}{FL}{FC}{}
+
+\hypertarget{Contents}{}
+\tableofcontents
+\newpage
+\lstlistoflistings
+\newpage
+\listoftables
+
+\newpage
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\footercenter{\textbf{Page \thepage/\pageref{LastPage}}}
+\fancyperso{HL}{HR}{FL}{FC}{FR}
+
+\section*{Introduction}
+\addcontentsline{toc}{section}{\protect\numberline{}Introduction}
+
+\newpage
+\section{FST blabla}
+
+\subsection{bonqwfowrgviw}
+
+\newpage
+\section*{Conclusion}
+\addcontentsline{toc}{section}{\protect\numberline{}Conclusion}
+
+\newpage
+\appendix
+\section{Annexe}
+
+\subsection{Tests avec un script shell}
+
+\subsubsection{Dictionnaires}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        Value & Word \\
+        \hline
+        0 & mop \\
+        1 & moth \\
+        2 & pop \\
+        3 & star \\
+        4 & stop \\
+        5 & top \\
+        \hline
+    \end{tabular}
+    \caption{dictionnary to use with }
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        Value & Word \\
+        \hline
+        0 & mop \\
+        1 & moth \\
+        2 & pop \\
+        3 & slop \\
+        4 & sloth \\
+        5 & stop \\
+        6 & top \\
+        \hline
+    \end{tabular}
+    \caption{dictionnary to use with }
+\end{table}
+
+\subsubsection{FST}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l||c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        N\oe u & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 2 & 4 & 6 & 7 & 5 & 7 & 8 & \\ \hline
+        N\oe u suivant & 1 & 4 & 4 & 6 & 2 & 3 & 9 & 9 & 5 & 7 & 5 & 9 & 8 & 9 & \\ \hline
+        N\oe u final &&&&&&&&&&&&&&& 9 \\ \hline
+        Caractère & M & P & T & S& O & T & H & P & O & T & O & P & A & R & \\ \hline
+        Poids & & 2 & 5 & 3 &&& 1 &&&&1&&&& \\ \hline
+    \end{tabular}
+    \caption{fst used with dictionnary - in -}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+\includegraphics[scale=0.5]{../c_asm/1.png}
+\end{figure}
+
+\end{document}
