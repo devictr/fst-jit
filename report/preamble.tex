@@ -2,9 +2,13 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[english, french]{babel}
+\usepackage[french]{babel}
 \usepackage[top=2cm, bottom=2cm, left=1.5cm, right=1.5cm,headheight=16pt]{geometry}
 \usepackage{lmodern}
+
+\addto\captionsfrench{%
+    \renewcommand{\tablename}{\textsc{Tableau}}%
+}
 
 \usepackage{cover-page}
 \title{Finite State Transducers Just-In-Time Compiling}

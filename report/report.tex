@@ -17,6 +17,8 @@
 \lstlistoflistings
 \newpage
 \listoftables
+\newpage
+\listoffigures
 
 \newpage
 \clearpage
@@ -29,9 +31,13 @@
 \addcontentsline{toc}{section}{\protect\numberline{}Introduction}
 
 \newpage
-\section{FST blabla}
+\section{Analyse préalable}
 
-\subsection{bonqwfowrgviw}
+\newpage
+\section{Des FST en JIT}
+
+\newpage
+\section{Optimiser : comment ?}
 
 \newpage
 \section*{Conclusion}
@@ -59,7 +65,8 @@
         5 & top \\
         \hline
     \end{tabular}
-    \caption{dictionnary to use with }
+    \caption{Dictionnaire à utiliser avec la FST dans le \autoref{tab:fst1}}
+    \label{tab:dico1}
 \end{table}
 
 \begin{table}[h]
@@ -77,9 +84,11 @@
         6 & top \\
         \hline
     \end{tabular}
-    \caption{dictionnary to use with }
+    \caption{Dictionnaire à utiliser avec la FST dans le \autoref{tab:fst2}}
+    \label{tab:dico2}
 \end{table}
 
+\clearpage
 \subsubsection{FST}
 
 \begin{table}[ht]
@@ -92,12 +101,39 @@
         Caractère & M & P & T & S& O & T & H & P & O & T & O & P & A & R & \\ \hline
         Poids & & 2 & 5 & 3 &&& 1 &&&&1&&&& \\ \hline
     \end{tabular}
-    \caption{fst used with dictionnary - in -}
+    \caption{FST utilisée avec le dictionnaire \autoref{tab:dico1}, voir \autoref{fig:fst-dico1} page \pageref{fig:fst-dico1}}
+    \label{tab:fst1}
 \end{table}
 
 \begin{figure}[ht]
     \centering
-\includegraphics[scale=0.5]{../c_asm/1.png}
+    \includegraphics[scale=0.5]{../c_asm/1.png}
+    \caption{La FST associée avec le \autoref{tab:fst1} page \pageref{tab:fst1}}
+    \label{fig:fst-dico1}
 \end{figure}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l||c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        N\oe u & 0 & 0 & 0 & 0 & 3 & 3 & 1 & 2 & 4 & 5 & 6 & 5 &\\ \hline
+        N\oe u suivant & 1 & 1 & 3 & 4 & 1 & 4 & 2 & 7 & 5 & 6 & 7 & 7 &\\ \hline
+        N\oe u final &&&&&&&&&&&&& 7 \\ \hline
+        Caractère & P & T & S & M& T & L & O & P & O & T & H & P & \\ \hline
+        Poids & 2 & 6 & 3 &  & 2 & & & & & 1 &&& \\ \hline
+    \end{tabular}
+    \caption{FST utilisée avec le dictionnaire \autoref{tab:dico2}, voir \autoref{fig:fst-dico2} page \pageref{fig:fst-dico2}}
+    \label{tab:fst2}
+\end{table}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.5]{../c_asm/2.png}
+    \caption{La FST associée avec le \autoref{tab:fst2} page \pageref{tab:fst2}}
+    \label{fig:fst-dico2}
+\end{figure}
+
+\clearpage
+\subsubsection{Script shell}
 
 \end{document}
