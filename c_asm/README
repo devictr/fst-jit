@@ -1,6 +1,17 @@
+==== C ====
+
 To use this, choose an existing .fst file (or write a new one).
 
 ./gen.sh 1.fst | gcc -O3 -x c -o fst -
+
+And use it with :
+./fst STAR
+
+==== Assembly ====
+
+To use this, choose an existing .fst file (or write a new one).
+
+./gen_asm.sh 1.fst | gcc -x assembler-o fst -
 
 And use it with :
 ./fst STAR
