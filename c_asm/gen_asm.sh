@@ -22,6 +22,22 @@ compute_fst:
 EOF
 
 while read DEP ARR CHAR WEIGHT ; do
+    # If it's a final node
+    if [[ ! "$CHAR" ]]; then
+        WEIGHT=${ARR:-0}
+        cat <<EOF
+	movl \$-1, %eax          # default : return -1
+	jmp .RET
+
+.NODE_$DEP:
+EOF
+    (( WEIGHT != 0 )) &&
+        echo "	addl  \$$WEIGHT, -4(%rbp)         # total += Weight"
+    echo "	jmp .END          # goto END"
+
+        continue
+    fi
+
     : ${WEIGHT:=0}
 
     if [[ $DEP != $PREV_DEP ]]; then
