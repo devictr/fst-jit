@@ -7,6 +7,8 @@ sort "$FST" > "$FST.sort"
 FIRST_CALL=1
 
 cat <<EOF
+#include <stdio.h>
+
 int compute_fst(const char* token)
 {
     int pos=0;
@@ -64,6 +66,12 @@ cat <<EOF
 
 END :
     return total;
+}
+
+int main(int argc, const char *argv[])
+{
+    printf("%d\n", compute_fst(argv[1]));
+    return 0;
 }
 EOF
 
