@@ -26,9 +26,10 @@ while read DEP ARR CHAR WEIGHT ; do
     }
 
 NODE_$DEP :
-    total += $WEIGHT;
-    goto END;
 EOF
+    (( WEIGHT != 0 )) &&
+        echo "    total += $WEIGHT;"
+    echo "    goto END;"
 
         continue
     fi
@@ -52,11 +53,10 @@ NODE_$DEP :
 EOF
     fi
 
-    cat <<EOF
-    case '$CHAR':
-        total += $WEIGHT;
-        goto NODE_$ARR;
-EOF
+    echo "    case '$CHAR':"
+    (( WEIGHT != 0 )) &&
+        echo "        total += $WEIGHT;"
+    echo "        goto NODE_$ARR;"
 
     PREV_DEP=$DEP
     FIRST_CALL=
