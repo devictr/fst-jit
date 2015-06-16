@@ -45,11 +45,9 @@
 
 \newpage
 \appendix
-\section{Annexe}
+\section{Annexe : tests avec un script shell}
 
-\subsection{Tests avec un script shell}
-
-\subsubsection{Dictionnaires}
+\subsection{Dictionnaires}
 
 \begin{table}[h]
     \centering
@@ -89,7 +87,7 @@
 \end{table}
 
 \clearpage
-\subsubsection{FST}
+\subsection{FST}
 
 \begin{table}[ht]
     \centering
@@ -134,6 +132,20 @@
 \end{figure}
 
 \clearpage
+\subsection{Générer à la volée du code C}
 \subsubsection{Script shell}
+
+\lstinputlisting[style=custombash, caption=Script pour générer un code C à la volée d'une FST,label=lst:bashgen]{../c_asm/gen.sh}
+
+\clearpage
+\subsubsection{Code C généré pour la FST définie dans le \autoref{tab:fst1}}
+
+\lstinputlisting[style=customc, caption=Code C généré pour la FST définie dans \autoref{tab:fst1},label=lst:cfst1]{../c_asm/gen_c_fst1.c}
+
+\clearpage
+\subsubsection{Code C généré pour la FST définie dans le \autoref{tab:fst2}}
+
+\lstinputlisting[style=customc, caption=Code C généré pour la FST définie dans \autoref{tab:fst2},label=lst:cfst2]{../c_asm/gen_c_fst2.c}
+
 
 \end{document}

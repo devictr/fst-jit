@@ -13,7 +13,7 @@
 \usepackage{cover-page}
 \title{Finite State Transducers Just-In-Time Compiling}
 \subtitle{Do you hear the bytecode ?}
-\author{Émilien Boulben\\Victor Delépine\\Corentin Peuvrel}
+\author{Émilien Boulben\\Victor Delepine\\Corentin Peuvrel}
 \location{Paris}
 \date{\today}
 \blurb
@@ -28,7 +28,7 @@
 \usepackage{lastpage}
 \headerleft{Finite State Transducer Just-In-Time Compiling}
 \headerright{Institut Superieur d'Électronique de Paris}
-\footerleft{É.Boulben, V.Delépine, C.Peuvrel}
+\footerleft{É.Boulben, V.Delepine, C.Peuvrel}
 \footerright{\hyperlink{Contents}{Table des matières}}
 
 \usepackage{parskip}
@@ -37,6 +37,31 @@
 \usepackage{listings}
 \usepackage{upquote}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\newcommand{\lstdefinestylecustom}[2] {%
+    \lstdefinestyle{#1}{
+        numbers=left,
+        stepnumber=1,
+        numberstyle=\scriptsize,
+        belowcaptionskip=1\baselineskip,
+        captionpos=b,
+        breaklines=true,
+        frame=L,
+        xleftmargin=\parindent,
+        language=#2,
+        showstringspaces=false,
+        basicstyle=\footnotesize\ttfamily,
+        keywordstyle=\bfseries\color{green!40!black},
+        commentstyle=\itshape\color{purple!40!black},
+        identifierstyle=\color{blue},
+        stringstyle=\color{orange},
+    }
+}
+
+\lstdefinestylecustom{custombash}{bash}
+\lstdefinestylecustom{customc}{C}
 
 \usepackage[pdftex,breaklinks,linktocpage,unicode]{hyperref}
 \hypersetup{
