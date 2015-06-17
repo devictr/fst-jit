@@ -122,6 +122,9 @@ done < "$FST.sort"
 
 cat <<EOF
 
+.ERR:
+	movl \$-1, %eax          # return -1
+	jmp .RET
 .END:
 	movl    -4(%rbp), %eax  # Put return value in eax
 .RET:
