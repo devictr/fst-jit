@@ -40,7 +40,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-\newcommand{\lstdefinestylecustom}[2] {%
+\newcommand{\lstdefinestylecustom}[3] {%
     \lstdefinestyle{#1}{
         numbers=left,
         stepnumber=1,
@@ -50,7 +50,7 @@
         breaklines=true,
         frame=L,
         xleftmargin=\parindent,
-        language=#2,
+        language=[#3]#2,
         showstringspaces=false,
         basicstyle=\footnotesize\ttfamily,
         keywordstyle=\bfseries\color{green!40!black},
@@ -60,8 +60,9 @@
     }
 }
 
-\lstdefinestylecustom{custombash}{bash}
-\lstdefinestylecustom{customc}{C}
+\lstdefinestylecustom{custombash}{bash}{}
+\lstdefinestylecustom{customc}{C}{}
+\lstdefinestylecustom{customasm}{Assembler}{x86masm}
 
 \usepackage[pdftex,breaklinks,linktocpage,unicode]{hyperref}
 \hypersetup{
