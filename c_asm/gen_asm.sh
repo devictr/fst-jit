@@ -128,7 +128,21 @@ EOF
 	ja .END
 	movq .NODE_${DEP}_SW(,%rax,8), %rax
 	jmp *%rax
+
+    .section .rodata
+.NODE_${DEP}_SW:
 EOF
+            j=0
+            for (( i = 0; i <= (ARR_ASCII[${#ARR_ASCII[@]}-1] - ARR_ASCII[0]) ; i++ )); do
+                if (( ARR_ASCII[0] + i == ARR_ASCII[j] )) ; then
+                    echo "	.quad .NODE_${DEP}_$(printf "\x$(printf "%x" ${ARR_ASCII[j]})")"
+                    (( j++ ))
+                else
+                    echo "	.quad .ERR"
+                fi
+            done
+
+            echo -e "	.text\n"
         else
             echo "	je .NODE_${DEP}_$CHAR"
         fi
