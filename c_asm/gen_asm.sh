@@ -3,6 +3,7 @@
 FST="$1"
 oIFS=$IFS
 : ${ASM_SWITCH:=1}
+(( ASM_SWITCH == 0 )) && unset ASM_SWITCH
 
 sort "$FST" > "$FST.sort"
 
