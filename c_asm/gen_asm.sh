@@ -25,6 +25,13 @@ EOF
 while read DEP ARR CHAR WEIGHT ; do
     # If it's a final node
     if [[ ! "$CHAR" ]]; then
+        if [[ ${#tmp[@]} != 0 ]] ; then
+            IFS=$'\n'
+            echo "${tmp[*]}"
+            IFS=$oIFS
+            tmp=()
+        fi
+
         WEIGHT=${ARR:-0}
         cat <<EOF
 	movl \$-1, %eax          # default : return -1
