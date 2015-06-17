@@ -116,7 +116,18 @@ EOF
             ""
             )
 
-        if [[ ! "$DO_SWITCH" ]]; then
+        if [[ "$DO_SWITCH" ]]; then
+            echo "	subl    \$${ARR_ASCII[0]}, %eax       # eax -= '$(printf '%c' "$CHAR")'"
+            # MAX - MIN
+            CHAR_RANGE=$(( ARR_ASCII[${#ARR_ASCII[@]}-1] - ARR_ASCII[0] ))
+
+            cat <<EOF
+	cmpl \$$CHAR_RANGE, %eax           # eax = '$(printf '%c' "$(printf "\x$(printf "%x" ${ARR_ASCII[${#ARR_ASCII[@]}-1]})")")' - '$(printf "\x$(printf "%x" ${ARR_ASCII[0]})")' (max - min)
+	ja .END
+	movq .NODE_${DEP}_SW(,%rax,8), %rax
+	jmp *%rax
+EOF
+        else
             echo "	je .NODE_${DEP}_$CHAR"
         fi
     else
