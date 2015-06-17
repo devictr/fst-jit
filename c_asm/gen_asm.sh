@@ -6,7 +6,7 @@ oIFS=$IFS
 (( ASM_SWITCH == 0 )) && unset ASM_SWITCH
 
 DO_SWITCH=
-SWITCH_LIMIT=2
+: ${SWITCH_LIMIT:=2}
 
 sort "$FST" > "$FST.sort"
 
