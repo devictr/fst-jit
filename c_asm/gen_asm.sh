@@ -17,6 +17,13 @@ compute_switch() {
     /^'$DEP'/{print ord[$3]}' "$FST.sort" | sort) )
 }
 
+next() {
+    PREV_DEP=$DEP
+    FIRST_CALL=
+
+    continue
+}
+
 cat <<EOF
 	.file	"${FST%.*}.c"
 	.text
@@ -116,8 +123,7 @@ EOF
         echo "	je .NODE_$ARR"
     fi
 
-    PREV_DEP=$DEP
-    FIRST_CALL=
+    next
 done < "$FST.sort"
 
 cat <<EOF
