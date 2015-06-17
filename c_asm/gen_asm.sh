@@ -8,7 +8,7 @@ sort "$FST" > "$FST.sort"
 FIRST_CALL=1
 
 cat <<EOF
-	.file	"3.c"
+	.file	"${FST%.*}.c"
 	.text
 	.globl	compute_fst
 	.type	compute_fst, @function
