@@ -5,6 +5,9 @@ oIFS=$IFS
 : ${ASM_SWITCH:=1}
 (( ASM_SWITCH == 0 )) && unset ASM_SWITCH
 
+DO_SWITCH=
+SWITCH_LIMIT=2
+
 sort "$FST" > "$FST.sort"
 
 FIRST_CALL=1
@@ -83,7 +86,10 @@ EOF
 
 EOF
         if [[ "$ASM_SWITCH" ]] ; then
+            DO_SWITCH=
             compute_switch
+            (( ${#ARR_ASCII[@]} > SWITCH_LIMIT )) &&
+                DO_SWITCH=1
         fi
     fi
 
