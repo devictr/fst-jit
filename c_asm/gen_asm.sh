@@ -117,6 +117,8 @@ EOF
             )
 
         if [[ "$DO_SWITCH" ]]; then
+            [[ $DEP == $PREV_DEP ]] && next
+
             echo "	subl    \$${ARR_ASCII[0]}, %eax       # eax -= '$(printf '%c' "$CHAR")'"
             # MAX - MIN
             CHAR_RANGE=$(( ARR_ASCII[${#ARR_ASCII[@]}-1] - ARR_ASCII[0] ))
