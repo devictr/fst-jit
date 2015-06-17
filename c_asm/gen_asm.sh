@@ -48,6 +48,7 @@ EOF
 
     : ${WEIGHT:=0}
 
+    # Change of node
     if [[ $DEP != $PREV_DEP ]]; then
         if [[ ! "$FIRST_CALL" ]]; then
             cat <<EOF
