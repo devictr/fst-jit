@@ -97,14 +97,17 @@ EOF
 
     echo "	cmpl \$$CHAR_INT, %eax          # case '$CHAR'"
 
-    if (( WEIGHT != 0 )) ; then
-        echo "	je .NODE_${DEP}_$CHAR"
+    if (( WEIGHT != 0 || DO_SWITCH == 1 )) ; then
         tmp+=(
             ".NODE_${DEP}_$CHAR:"
             "	addl  \$$WEIGHT, -4(%rbp)      # total += $WEIGHT"
             "	jmp .NODE_$ARR"
             ""
             )
+
+        if [[ ! "$DO_SWITCH" ]]; then
+            echo "	je .NODE_${DEP}_$CHAR"
+        fi
     else
         echo "	je .NODE_$ARR"
     fi
