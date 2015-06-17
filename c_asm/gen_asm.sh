@@ -2,10 +2,16 @@
 
 FST="$1"
 oIFS=$IFS
+: ${ASM_SWITCH:=1}
 
 sort "$FST" > "$FST.sort"
 
 FIRST_CALL=1
+
+compute_switch() {
+    ARR_ASCII=( $(awk 'BEGIN{for(n=0;n<256;n++)ord[sprintf("%c",n)]=n}
+    /^'$DEP'/{print ord[$3]}' "$FST.sort" | sort) )
+}
 
 cat <<EOF
 	.file	"${FST%.*}.c"
@@ -75,6 +81,9 @@ EOF
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
 EOF
+        if [[ "$ASM_SWITCH" ]] ; then
+            compute_switch
+        fi
     fi
 
     printf -v CHAR_INT '%d' "\"$CHAR"
