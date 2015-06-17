@@ -135,10 +135,10 @@ EOF
             j=0
             for (( i = 0; i <= (ARR_ASCII[${#ARR_ASCII[@]}-1] - ARR_ASCII[0]) ; i++ )); do
                 if (( ARR_ASCII[0] + i == ARR_ASCII[j] )) ; then
-                    echo "	.quad .NODE_${DEP}_$(printf "\x$(printf "%x" ${ARR_ASCII[j]})")"
+                    echo "	.quad .NODE_${DEP}_$(printf "\x$(printf "%x" ${ARR_ASCII[j]})")         # '$(printf "\x$(printf "%x" ${ARR_ASCII[j]})")'"
                     (( j++ ))
                 else
-                    echo "	.quad .ERR"
+                    echo "	.quad .ERR              # '$(printf "\x$(printf "%x" $(( ARR_ASCII[0] + i )))")'"
                 fi
             done
 
