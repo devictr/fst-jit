@@ -40,7 +40,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+\makeatletter
 \newcommand{\lstdefinestylecustom}[3] {%
+    \ifnum\pdfstrcmp{#3}{x86masm}=0
     \lstdefinestyle{#1}{
         numbers=left,
         stepnumber=1,
@@ -57,8 +59,29 @@
         commentstyle=\itshape\color{purple!40!black},
         identifierstyle=\color{blue},
         stringstyle=\color{orange},
+        comment=[l]\#,
     }
+    \else
+    \lstdefinestyle{#1}{
+        numbers=left,
+        stepnumber=1,
+        numberstyle=\scriptsize,
+        belowcaptionskip=1\baselineskip,
+        captionpos=b,
+        breaklines=true,
+        frame=L,
+        xleftmargin=\parindent,
+        language=#2,
+        showstringspaces=false,
+        basicstyle=\footnotesize\ttfamily,
+        keywordstyle=\bfseries\color{green!40!black},
+        commentstyle=\itshape\color{purple!40!black},
+        identifierstyle=\color{blue},
+        stringstyle=\color{orange},
+    }
+    \fi
 }
+\makeatother
 
 \lstdefinestylecustom{custombash}{bash}{}
 \lstdefinestylecustom{customc}{C}{}

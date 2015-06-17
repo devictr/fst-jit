@@ -4,135 +4,135 @@
 	.type	compute_fst, @function
 
 compute_fst:
-	pushq	%rbp             # remember old base pointer
-	movq	%rsp, %rbp       # set new base pointer
-	movq	%rdi, -24(%rbp)  # put content of rdi (token) in -24(%rbp)
+	pushq	%rbp            # remember old base pointer
+	movq	%rsp, %rbp      # set new base pointer
+	movq	%rdi, -24(%rbp) # put content of rdi (token) in -24(%rbp)
 	movl	$0, -8(%rbp)    # pos   (-8(%rbp)) = 0
 	movl	$0, -4(%rbp)    # total (-4(%rbp)) = 0
 
 .NODE_0:
-	addl	$1, -8(%rbp)   # pos++
+	addl	$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
 	addq	%rdx, %rax      # rax = &(token[pos-1])
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
-	cmpl $80, %eax      # case '80'
-	je .NODE_0_80
-	cmpl $84, %eax      # case '84'
-	je .NODE_0_84
-	cmpl $83, %eax      # case '83'
-	je .NODE_0_83
-	cmpl $77, %eax      # case '77'
+	cmpl $80, %eax          # case 'P'
+	je .NODE_0_P
+	cmpl $84, %eax          # case 'T'
+	je .NODE_0_T
+	cmpl $83, %eax          # case 'S'
+	je .NODE_0_S
+	cmpl $77, %eax          # case 'M'
 	je .NODE_4
 	movl $-1, %eax          # default : return -1
 	jmp .RET
 
-.NODE_0_80:
-	addl  $2, -4(%rbp)         # total += 2
+.NODE_0_P:
+	addl  $2, -4(%rbp)      # total += 2
 	jmp .NODE_1
 
-.NODE_0_84:
-	addl  $6, -4(%rbp)         # total += 6
+.NODE_0_T:
+	addl  $6, -4(%rbp)      # total += 6
 	jmp .NODE_1
 
-.NODE_0_83:
-	addl  $3, -4(%rbp)         # total += 3
+.NODE_0_S:
+	addl  $3, -4(%rbp)      # total += 3
 	jmp .NODE_3
 
 .NODE_1:
-	addl	$1, -8(%rbp)   # pos++
+	addl	$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
 	addq	%rdx, %rax      # rax = &(token[pos-1])
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
-	cmpl $79, %eax      # case '79'
+	cmpl $79, %eax          # case 'O'
 	je .NODE_2
 	movl $-1, %eax          # default : return -1
 	jmp .RET
 
 .NODE_2:
-	addl	$1, -8(%rbp)   # pos++
+	addl	$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
 	addq	%rdx, %rax      # rax = &(token[pos-1])
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
-	cmpl $80, %eax      # case '80'
+	cmpl $80, %eax          # case 'P'
 	je .NODE_7
 	movl $-1, %eax          # default : return -1
 	jmp .RET
 
 .NODE_3:
-	addl	$1, -8(%rbp)   # pos++
+	addl	$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
 	addq	%rdx, %rax      # rax = &(token[pos-1])
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
-	cmpl $84, %eax      # case '84'
-	je .NODE_3_84
-	cmpl $76, %eax      # case '76'
+	cmpl $84, %eax          # case 'T'
+	je .NODE_3_T
+	cmpl $76, %eax          # case 'L'
 	je .NODE_4
 	movl $-1, %eax          # default : return -1
 	jmp .RET
 
-.NODE_3_84:
-	addl  $2, -4(%rbp)         # total += 2
+.NODE_3_T:
+	addl  $2, -4(%rbp)      # total += 2
 	jmp .NODE_1
 
 .NODE_4:
-	addl	$1, -8(%rbp)   # pos++
+	addl	$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
 	addq	%rdx, %rax      # rax = &(token[pos-1])
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
-	cmpl $79, %eax      # case '79'
+	cmpl $79, %eax          # case 'O'
 	je .NODE_5
 	movl $-1, %eax          # default : return -1
 	jmp .RET
 
 .NODE_5:
-	addl	$1, -8(%rbp)   # pos++
+	addl	$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
 	addq	%rdx, %rax      # rax = &(token[pos-1])
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
-	cmpl $84, %eax      # case '84'
-	je .NODE_5_84
-	cmpl $80, %eax      # case '80'
+	cmpl $84, %eax          # case 'T'
+	je .NODE_5_T
+	cmpl $80, %eax          # case 'P'
 	je .NODE_7
 	movl $-1, %eax          # default : return -1
 	jmp .RET
 
-.NODE_5_84:
-	addl  $1, -4(%rbp)         # total += 1
+.NODE_5_T:
+	addl  $1, -4(%rbp)      # total += 1
 	jmp .NODE_6
 
 .NODE_6:
-	addl	$1, -8(%rbp)   # pos++
+	addl	$1, -8(%rbp)    # pos++
 	movl	-8(%rbp), %eax  # eax = pos
 	leaq	-1(%rax), %rdx  # rdx = pos - 1
 	movq	-24(%rbp), %rax # load token (address) in rax
 	addq	%rdx, %rax      # rax = &(token[pos-1])
 	movzbl	(%rax), %eax    # eax = token[pos-1]
 
-	cmpl $72, %eax      # case '72'
+	cmpl $72, %eax          # case 'H'
 	je .NODE_7
 	movl $-1, %eax          # default : return -1
 	jmp .RET
 
 .NODE_7:
-	jmp .END          # goto END
+	jmp .END                # goto END
 
 .END:
 	movl    -4(%rbp), %eax  # Put return value in eax
@@ -153,17 +153,17 @@ main:
 	subq	$16, %rsp
 	movl	%edi, -4(%rbp)
 	movq	%rsi, -16(%rbp)
-	cmpl	$1, -4(%rbp)
+	cmpl	$1, -4(%rbp)        # if (argc < 2)
 	jg	.DO_MAIN
-	movl	$1, %eax
+	movl	$1, %eax            # return 1;
 	jmp	.END_MAIN
 .DO_MAIN:
-	movq	-16(%rbp), %rax
-	addq	$8, %rax
-	movq	(%rax), %rax
-	movq	%rax, %rdi
+	movq	-16(%rbp), %rax     # rax = &(argv[0])
+	addq	$8, %rax            # rax = &(argv[1])
+	movq	(%rax), %rax        # rax = argv[1]
+	movq	%rax, %rdi          # rdi = argv[1]
 	call	compute_fst
-	movl	%eax, %esi
+	movl	%eax, %esi          # esi = compute_fst()
 	movl	$.PRINTF_FMT, %edi
 	movl	$0, %eax
 	call	printf
