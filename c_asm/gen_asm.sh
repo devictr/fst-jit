@@ -43,12 +43,14 @@ while read DEP ARR CHAR WEIGHT ; do
         fi
 
         WEIGHT=${ARR:-0}
-        cat <<EOF
+
+        [[ ! "$DO_SWITCH" ]] &&
+            cat <<EOF
 	movl \$-1, %eax          # default : return -1
 	jmp .RET
-
-.NODE_$DEP:
 EOF
+        echo -e ".NODE_$DEP:"
+
     (( WEIGHT != 0 )) &&
         echo "	addl  \$$WEIGHT, -4(%rbp)         # total += Weight"
     echo "	jmp .END                # goto END"
@@ -60,7 +62,7 @@ EOF
 
     # Change of node
     if [[ $DEP != $PREV_DEP ]]; then
-        if [[ ! "$FIRST_CALL" ]]; then
+        if [[ ! "$FIRST_CALL" && ! "$DO_SWITCH" ]]; then
             cat <<EOF
 	movl \$-1, %eax          # default : return -1
 	jmp .RET
