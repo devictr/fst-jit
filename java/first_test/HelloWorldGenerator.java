@@ -2,7 +2,7 @@ class HelloWorldGenerator {
 
     private static StringBuffer strBuff = new StringBuffer();
 
-    public static void main(String... args) {
+    public static void compute() {
         append("class HelloWorld {");
          
         generateMain();
@@ -11,12 +11,12 @@ class HelloWorldGenerator {
         System.out.print(strBuff.toString());
     }
 
-    public static void append(String strToAppend) {
+    private static void append(String strToAppend) {
         strBuff.append(strToAppend);
         strBuff.append("\n");
     }
 
-    public static void generateMain() {
+    private static void generateMain() {
         appendWithTab("public static void main(String... args) {", 1);
 
         appendWithTab("System.out.println(\"Hello World !\");", 2);
@@ -24,7 +24,7 @@ class HelloWorldGenerator {
         appendWithTab("}", 1);
     }
 
-    public static void appendWithTab(String strToAppend, int numberOfTab) {
+    private static void appendWithTab(String strToAppend, int numberOfTab) {
         for (int i = 0; i < numberOfTab; i++) {
             strBuff.append("\t");
         }
