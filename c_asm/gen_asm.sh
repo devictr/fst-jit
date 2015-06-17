@@ -97,7 +97,9 @@ EOF
 
     printf -v CHAR_INT '%d' "\"$CHAR"
 
-    echo "	cmpl \$$CHAR_INT, %eax          # case '$CHAR'"
+
+    [[ ! "$DO_SWITCH" ]] &&
+        echo "	cmpl \$$CHAR_INT, %eax          # case '$CHAR'"
 
     if (( WEIGHT != 0 || DO_SWITCH == 1 )) ; then
         tmp+=(
