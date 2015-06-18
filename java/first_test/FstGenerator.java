@@ -46,7 +46,10 @@ class FstGenerator {
     }
 
     private void generateLastStateCase(State state) {
-        
+        appendWithTab("private static float node_" + state.getId()
+               + "(int[] token, int pos, float result) {", 1); 
+        appendWithTab("return result;", 2);
+        appendWithTab("}", 1);
     }
 
     private void generateStateWithOneArc(State state) {
