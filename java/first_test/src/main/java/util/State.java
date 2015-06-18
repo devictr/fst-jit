@@ -177,4 +177,13 @@ public class State implements Comparable<State> {
         return null;
     }
 
+    public Arc getArcForTarget(int letter) {
+        for (Arc arc : arcs) {
+            if (arc.getIlabel() == letter) {
+                return arc;
+            }
+        }
+        return null;
+    }
+
 }
