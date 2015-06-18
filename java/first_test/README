@@ -1,4 +1,6 @@
 To launch :
 
-javac FstGeneratorSwitch.java && javac Launcher.java && java Launcher > FstComputeSwitch.java && javac FstComputeSwitch.java && javac Test.java && java Test
-
+> go in src package
+> javac generator/Test.java -d ../bin
+> go in bin
+> javac generator.test input
