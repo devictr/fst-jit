@@ -29,6 +29,7 @@ NODE_$DEP :
 EOF
     (( WEIGHT != 0 )) &&
         echo "    total += $WEIGHT;"
+    echo "    if (token[pos] != '\\0') return -1;"
     echo "    goto END;"
 
         continue
