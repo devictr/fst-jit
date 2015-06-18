@@ -1,0 +1,36 @@
+=== C ===
+
+Nous avons commencé par créer manuellement des FST très basiques (en adaptant légèrement le format défini par AT&T pour décrire des FST dans un fichier texte). Nous nous en servirons comme jeu de tests pour tout nos programmes futurs.
+
+Pour nos premiers POC, nous somme partis avec les langages que nous maîtrisions le plus (à savoir, Bash et C) pour pouvoir se concentrer sur le coeur de l'algorithme.
+
+Le principe est d'avoir un script shell qui prenne en entrée un fichier texte contenant une FST, et de générer dynamiquement un code C qui puisse parcourir cette FST. L'idée est de générer un algorithme naïf, et d'avoir un code très long, mais dont toutes les étapes soient très simples. On espère ainsi avoir de très bonnes performances, quitte à avoir un programme très gros, mais potentiellement optimisable/raccourcissable par le compilateur.
+
+La première étape pour construire ce script est bien sûr de prévoir la forme qu'aura le code C généré : nous sommes partis sur une fonction contenant de multiples label correspondant chacun à un state/node et contenant un switch qui, suivant la lettre courrante fait un goto sur le label du state/node suivant, ou un return d'un code d'erreur si le token d'entrée ne match pas la FST.
+Cette fonction prends comme seul paramètre d'entrée une chaine (tableau de char), qui sera le token d'entrée dont on veut connaitre la valeur et retourne le poids cumulé de tout les arcs traversé, ou -1 en cas d'erreur. Il faut donc noté qu'avec cette méthode on ne peut pas supporter de poids négatifs, au risque d'avoir une collision entre le code d'erreur et un poids cumulé effectivement négatif. Pour gérer ce cas, le plus simple serait d'utiliser errno.
+
+Le code a été un peu moins simple que prévu pour pouvoir générer du C valide, en effet, il y a un certain nombre de cas particuliers à gérer, pour gérer correctement les erreurs, de multiples nodes de fins.
+
+Au final, un node/state générera un code semblable à ceci (pour un node appellé "7", qui possède un arc pour le caractère 'X' avec un poids de 6 et qui va au node "21", et un arc pour le caractère 'Y' avec un poids nulle et allant au node "42") :
+                                           
+NODE_7 :
+    switch(token[pos++]) {
+        case 'X' :
+            total += 6;
+            goto NODE_21;
+        case 'Y' :
+            goto NODE_42;
+        default :
+            return -1;
+    }
+
+On remarque que l'on a un counter "pos" qu'on incrémente de manière inconditionnel, vu que l'on se déplace toujours un caractère par un caractère.
+
+Pour pouvoir facilement lancé le programme généré, nous avons rajouté une fonction main qui appelle juste notre fonction compute_fst sur le premier argument de la command line, rendant ainsi le programme autonome.
+
+Il nous suffit donc, pour générer quelque chose d'utilisable de faire ceci :
+./gen.sh file.fst | gcc -x c -o fst -
+Puis :
+./fst LE_TOKEN
+
+Les options sur gcc (on peut aussi rajouter un -O3 pour optimiser au maximum la compilation) servant seulement de prendre l'entrée standard comme "fichier" source, puisque gen.sh affiche le code généré sur la sortie standard.
