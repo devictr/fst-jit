@@ -61,13 +61,26 @@ class FstGenerator {
         appendWithTab("return -1;", 3);
         appendWithTab("return node_" + state.getArc(0).getNextState().getId()
                + "(token, pos+1, result+" +
-               state.getArc(0).getWeight() + ");", 2);
+               state.getArc(0).getWeight() + "f);", 2);
 
         appendWithTab("}", 1);
     }
 
     private void generateGeneralState(State state) {
-
+        appendWithTab("private static float node_" + state.getId()
+               + "(int[] token, int pos, float result) {", 1); 
+        appendWithTab("if(pos>=token.length) {return -1;}", 2);
+        appendWithTab("switch(token[pos]) {", 2);
+        for (int i = 0; i < state.getNumArcs(); i++) {
+            appendWithTab("case " + state.getArc(i).getIlabel()  + ":", 3); 
+        appendWithTab("return node_" + state.getArc(i).getNextState().getId()
+               + "(token, pos+1, result+" +
+               state.getArc(i).getWeight() + "f);", 4);
+        }
+        appendWithTab("default:", 3);
+        appendWithTab("return -1;", 4);
+        appendWithTab("}",2);
+        appendWithTab("}", 1);
     }
 
     private void append(String strToAppend) {
