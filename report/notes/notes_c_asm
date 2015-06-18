@@ -34,3 +34,16 @@ Puis :
 ./fst LE_TOKEN
 
 Les options sur gcc (on peut aussi rajouter un -O3 pour optimiser au maximum la compilation) servant seulement de prendre l'entrée standard comme "fichier" source, puisque gen.sh affiche le code généré sur la sortie standard.
+
+=== Assembleur ===
+
+Sachant qu'on devrait sûrement au final généré du bytecode, nous avons décidé que, quitte à avoir du C, autant aller jusqu'à générer directement de l'assembleur. Pas spécialement pour être plus performant que le C (en effet, l'assembleur  généré par gcc sera toujours plus éfficace que celui que l'on peut faire à la main), mais pour avoir des idées des problèmes que l'on rencontrera en java/bytecode.
+
+Quand nous parlons d'assembleur, nous entendons "assembleur x86_64" bien sûr, soit l'assembleur qui est généré par gcc sur nos machines.
+
+En donnant l'option "-S" à gcc, on obtient non pas un binaire éxécutable, mais un fichier ".s" qui contient le code assembleur généré (avant l'assemblage éffectif en binaire). En le générant pour nos sources C, nous avons pu faire du rétro-engineering dessus et comprendre la marche à suivre pour notre deuxième script.
+
+La première partie, pour adapter toutes les parties générées de manière statique, a été relativement aisé. Par exemple, la déclaration de la fonction main, bien que plus longue et moins lisible qu'en C pouvait être plus ou moins copié/collé par rapport à ce que générait gcc, et même si quelques lignes restaient un peu mystérieuse au moment de la mise en place de "l'environnement" de la fonction, ce n'était absolument pas bloquant.
+
+A l'opposé, lorsqu'il a fallu adapter les parties générées dynamiquement, ce fut beaucoup moins simple.
+Nous avons du, l'espace d'un instant, changer notre façon de programmer. En effet, l'assembleur est tellement bas niveau que l'on ne dispose pas de toutes les "syntactic sugar" dont on a tant l'habitude, nottament pour le contrôle de flux. Par exemple, ce n'est pas si simple que ça de faire un "if (...) single_instruction ;", il faut gérer deux saut, les labels associés, potentiellement, préparer un ou deux registres, etc...
