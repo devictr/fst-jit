@@ -13,13 +13,17 @@ class Launcher {
         
         FstGeneratorSwitch fstGenSwitch = new FstGeneratorSwitch();
 
-        StringBuffer strBuff1 = fstGenSwitch.compute(state1);
-        StringBuffer strBuff2 = fstGenSwitch.compute(state2);
-        StringBuffer strBuff3 = fstGenSwitch.compute(state3);
+        String classNameTest1 = "FstComputeTest1";
+        String classNameTest2 = "FstComputeTest2";
+        String classNameTest3 = "FstComputeTest3";
 
-        writeToFile(strBuff1, "FstComputeTest1");
-        writeToFile(strBuff2, "FstComputeTest2");
-        writeToFile(strBuff3, "FstComputeTest3");
+        StringBuffer strBuff1 = fstGenSwitch.compute(state1, classNameTest1);
+        StringBuffer strBuff2 = fstGenSwitch.compute(state2, classNameTest2);
+        StringBuffer strBuff3 = fstGenSwitch.compute(state3, classNameTest3);
+
+        writeToFile(strBuff1, classNameTest1);
+        writeToFile(strBuff2, classNameTest2);
+        writeToFile(strBuff3, classNameTest3);
     }
 
     private static void writeToFile(StringBuffer strBuff, String className) {

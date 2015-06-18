@@ -1,5 +1,3 @@
-import java.util.List;
-
 class FstGeneratorSwitch {
 
     private StringBuffer strBuff;
@@ -7,10 +5,10 @@ class FstGeneratorSwitch {
     public FstGeneratorSwitch() {
     }
 
-    public StringBuffer compute(State initState) {
+    public StringBuffer compute(State initState, String className) {
         strBuff = new StringBuffer();
 
-        append("class FstComputeSwitch {");    
+        append("class " + className + " {");    
 
         appendWithTab("public static float compute(int[] token) {", 1);
 
