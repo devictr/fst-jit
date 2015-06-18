@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class State {
+public class State implements Comparable<State> {
 
     protected int id = -1;
 
@@ -63,6 +63,10 @@ public class State {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getNumArcs() {
@@ -119,6 +123,37 @@ public class State {
 
     public void setArc(int index, Arc arc) {
         arcs.set(index, arc);
+    }
+
+    @Override
+    public int compareTo(State otherState) {
+        if ( this.arcs.size() == 0 ) {
+            return 42;
+        } else if ( otherState.getNumArcs() == 0 ) {
+            return -42;
+        }
+
+        return (scanArcsToFind(otherState, this))? -42 : 42;
+    }
+
+    private boolean scanArcsToFind(State stateToFind,
+            State currentState) {
+        if(currentState.getNumArcs() == 0) {
+            return false;
+        }
+        if ( currentState.equals(stateToFind) ) {
+            return true;
+        }
+
+        for (int i = 0; i < currentState.getNumArcs(); i++) {
+            if ( scanArcsToFind(stateToFind, currentState.getArc(i)
+                        .getNextState())) {
+                return true;
+                        }
+        }
+
+        return false;
+
     }
 
 }
