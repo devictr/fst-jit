@@ -48,8 +48,7 @@ EOF
 
         cat <<EOF
 NODE_$DEP :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
 EOF
     fi
 
