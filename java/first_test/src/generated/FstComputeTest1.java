@@ -1,3 +1,4 @@
+package generated;
 class FstComputeTest1 {
 	public static float compute(int[] token) {
 		int pos=0;

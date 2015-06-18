@@ -11,6 +11,8 @@ class FstGenerator {
 
     public StringBuffer compute(State initState, String className) {
         strBuff = new StringBuffer();
+        
+        append("package generated;");
 
         append("class " + className + " {");    
 
