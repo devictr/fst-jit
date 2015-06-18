@@ -11,13 +11,22 @@ class FstGenerator {
     }
 
     public StringBuffer compute() {
-        append("class HelloWorld {");
-         
+        append("class FstCompute {");
+        emptyLine(); 
         generateMain();
+        emptyLine();
+
+        for ( State state : fstStates ) {
+            generateStateCase(state);
+        }
 
         append("}");
 
         return strBuff;
+    }
+
+    private void generateStateCase(State state) {
+        
     }
 
     private void append(String strToAppend) {
@@ -26,9 +35,9 @@ class FstGenerator {
     }
 
     private void generateMain() {
-        appendWithTab("public void main(String... args) {", 1);
+        appendWithTab("public static int compute(int[] token) {", 1);
 
-        appendWithTab("System.out.println(\"Hello World !\");", 2);
+        appendWithTab("return node_0(token, 0, 0);", 2);
 
         appendWithTab("}", 1);
     }
@@ -38,6 +47,10 @@ class FstGenerator {
             strBuff.append("\t");
         }
         strBuff.append(strToAppend);
+        strBuff.append("\n");
+    }
+
+    private void emptyLine() {
         strBuff.append("\n");
     }
 
