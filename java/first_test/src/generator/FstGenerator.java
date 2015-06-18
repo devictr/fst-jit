@@ -2,7 +2,7 @@ package generator;
 
 import util.State;
 
-class FstGenerator {
+public class FstGenerator {
 
     private StringBuffer strBuff;
 

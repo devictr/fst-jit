@@ -6,7 +6,7 @@ import java.io.IOException;
 import util.State;
 import util.Arc;
 
-class Launcher {
+public class Launcher {
 
     public static void main(String... args) {
         

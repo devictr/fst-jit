@@ -4,7 +4,7 @@ import generated.FstComputeTest1;
 import generated.FstComputeTest2;
 import generated.FstComputeTest3;
 
-class Test {
+public class Test {
 
     public static void main (String[] args) {
         String strInput = "";
