@@ -26,7 +26,7 @@ class Launcher {
         State state0 = new State(); 
         state0.addArc(arc01);
 
-        HelloWorldGenerator.compute();
+        FstGenerator.compute();
     }
 
 }

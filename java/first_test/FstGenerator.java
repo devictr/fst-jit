@@ -1,4 +1,4 @@
-class HelloWorldGenerator {
+class FstGenerator {
 
     private static StringBuffer strBuff = new StringBuffer();
 
