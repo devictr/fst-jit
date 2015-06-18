@@ -8,7 +8,7 @@ import util.Arc;
 
 public class Launcher {
 
-    public static void main(String... args) {
+    public static void run() {
         
         State state1 = test1();
         State state2 = test2();
