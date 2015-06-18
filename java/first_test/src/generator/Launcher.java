@@ -30,7 +30,7 @@ class Launcher {
     }
 
     private static void writeToFile(StringBuffer strBuff, String className) {
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(className + ".java"))) {
+        try (BufferedWriter out = new BufferedWriter(new FileWriter("../src/generated/" + className + ".java"))) {
             out.write(strBuff.toString());
             out.flush();
         } catch (IOException e) {
