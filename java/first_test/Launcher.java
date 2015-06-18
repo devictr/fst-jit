@@ -45,8 +45,8 @@ class Launcher {
 
         //System.out.println(strBuff.toString());
         
-        FstGeneratorSwitch fstGenSwitch = new FstGeneratorSwitch(statesToCompute);
-        StringBuffer strBuffSwitch = fstGenSwitch.compute();
+        FstGeneratorSwitch fstGenSwitch = new FstGeneratorSwitch();
+        StringBuffer strBuffSwitch = fstGenSwitch.compute(state0);
         System.out.println(strBuffSwitch.toString());
     }
 
