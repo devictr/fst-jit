@@ -1,5 +1,5 @@
 package generated;
-class FstComputeTest3 {
+public class FstComputeTest3 {
 	public static float compute(int[] token) {
 		int pos=0;
 		float result=0f;

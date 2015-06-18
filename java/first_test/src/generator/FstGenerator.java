@@ -14,7 +14,7 @@ class FstGenerator {
         
         append("package generated;");
 
-        append("class " + className + " {");    
+        append("public class " + className + " {");    
 
         appendWithTab("public static float compute(int[] token) {", 1);
 
