@@ -31,6 +31,8 @@ public class State implements Comparable<State> {
 
     protected int initialNumArcs = -1;
 
+    private boolean isFinalState = false;
+
     public State() {
         arcs = new ArrayList<Arc>();
     }
@@ -81,6 +83,14 @@ public class State implements Comparable<State> {
 
     public Arc getArc(int index) {
         return this.arcs.get(index);
+    }
+
+    public void setFinalState() {
+        isFinalState = true;
+    }
+
+    public boolean isFinalState() {
+        return isFinalState;
     }
 
     @Override
@@ -156,6 +166,15 @@ public class State implements Comparable<State> {
 
         return false;
 
+    }
+
+    public State getTarget(int letter) {
+        for (Arc arc : arcs) {
+            if (arc.getIlabel() == letter) {
+                return arc.getNextState();
+            }
+        }
+        return null;
     }
 
 }
