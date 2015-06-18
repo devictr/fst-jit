@@ -40,10 +40,14 @@ class Launcher {
 
         Collections.sort(statesToCompute);
 
-        FstGenerator fstGen = new FstGenerator(statesToCompute);
-        StringBuffer strBuff = fstGen.compute();
+        //FstGenerator fstGen = new FstGenerator(statesToCompute);
+        //StringBuffer strBuff = fstGen.compute();
 
-        System.out.println(strBuff.toString());
+        //System.out.println(strBuff.toString());
+        
+        FstGeneratorSwitch fstGenSwitch = new FstGeneratorSwitch(statesToCompute);
+        StringBuffer strBuffSwitch = fstGenSwitch.compute();
+        System.out.println(strBuffSwitch.toString());
     }
 
 }
