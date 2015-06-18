@@ -1,6 +1,6 @@
 To launch :
 
-> go in src package
-> javac generator/Test.java -d ../bin
+> go in src.main.java package
+> javac generator/Test.java -d ../../.../bin
 > go in bin
-> javac generator.test input
+> javac generator.Test input
