@@ -1,8 +1,8 @@
-class FstGeneratorSwitch {
+class FstGenerator {
 
     private StringBuffer strBuff;
 
-    public FstGeneratorSwitch() {
+    public FstGenerator() {
     }
 
     public StringBuffer compute(State initState, String className) {

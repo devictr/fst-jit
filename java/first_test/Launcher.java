@@ -11,15 +11,15 @@ class Launcher {
         State state2 = test2();
         State state3 = test3();
         
-        FstGeneratorSwitch fstGenSwitch = new FstGeneratorSwitch();
+        FstGenerator fstGen = new FstGenerator();
 
         String classNameTest1 = "FstComputeTest1";
         String classNameTest2 = "FstComputeTest2";
         String classNameTest3 = "FstComputeTest3";
 
-        StringBuffer strBuff1 = fstGenSwitch.compute(state1, classNameTest1);
-        StringBuffer strBuff2 = fstGenSwitch.compute(state2, classNameTest2);
-        StringBuffer strBuff3 = fstGenSwitch.compute(state3, classNameTest3);
+        StringBuffer strBuff1 = fstGen.compute(state1, classNameTest1);
+        StringBuffer strBuff2 = fstGen.compute(state2, classNameTest2);
+        StringBuffer strBuff3 = fstGen.compute(state3, classNameTest3);
 
         writeToFile(strBuff1, classNameTest1);
         writeToFile(strBuff2, classNameTest2);
