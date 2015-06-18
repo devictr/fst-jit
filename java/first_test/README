@@ -1,3 +1,4 @@
 To launch :
 
-javac Launcher.java && java Launcher > HelloWorld.java && javac HelloWorld.java && java HelloWorld
+javac FstGeneratorSwitch.java && javac Launcher.java && java Launcher > FstComputeSwitch.java && javac FstComputeSwitch.java && javac Test.java && java Test
+
