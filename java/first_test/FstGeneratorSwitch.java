@@ -5,10 +5,10 @@ class FstGeneratorSwitch {
     private StringBuffer strBuff;
 
     public FstGeneratorSwitch() {
-        strBuff = new StringBuffer();
     }
 
     public StringBuffer compute(State initState) {
+        strBuff = new StringBuffer();
 
         append("class FstComputeSwitch {");    
 

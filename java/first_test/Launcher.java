@@ -1,16 +1,11 @@
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+
+import java.io.IOException;
+
 class Launcher {
 
     public static void main(String... args) {
-
-        //List<State> statesToCompute = Arrays.asList(state1, state2,
-                //state0, state4, state3);
-
-        //Collections.sort(statesToCompute);
-
-        //FstGenerator fstGen = new FstGenerator(statesToCompute);
-        //StringBuffer strBuff = fstGen.compute();
-
-        //System.out.println(strBuff.toString());
         
         State state1 = test1();
         State state2 = test2();
@@ -22,6 +17,18 @@ class Launcher {
         StringBuffer strBuff2 = fstGenSwitch.compute(state2);
         StringBuffer strBuff3 = fstGenSwitch.compute(state3);
 
+        writeToFile(strBuff1, "FstComputeTest1");
+        writeToFile(strBuff2, "FstComputeTest2");
+        writeToFile(strBuff3, "FstComputeTest3");
+    }
+
+    private static void writeToFile(StringBuffer strBuff, String className) {
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(className + ".java"))) {
+            out.write(strBuff.toString());
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static State test1() {
