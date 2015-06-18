@@ -1,3 +1,5 @@
+package util;
+
 /**
  * 
  * From sphinx4 project https://github.com/cmusphinx/sphinx4
@@ -29,7 +31,7 @@ public class State implements Comparable<State> {
 
     protected int initialNumArcs = -1;
 
-    protected State() {
+    public State() {
         arcs = new ArrayList<Arc>();
     }
 

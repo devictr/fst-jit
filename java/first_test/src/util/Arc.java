@@ -1,3 +1,5 @@
+package util;
+
 /**
  *
  * from sphinx4 project https://github.com/cmusphinx/sphinx4
@@ -13,7 +15,7 @@
  *
  * original author : John Salatas
  *
- */
+*/
 
 public class Arc {
 

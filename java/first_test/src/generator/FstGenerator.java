@@ -1,3 +1,7 @@
+package generator;
+
+import util.State;
+
 class FstGenerator {
 
     private StringBuffer strBuff;
