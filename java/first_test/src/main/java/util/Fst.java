@@ -213,4 +213,8 @@ public class Fst {
         return states;
     }
 
+    public void setStates(ArrayList<State> states) {
+        this.states = states;
+    }
+
 }

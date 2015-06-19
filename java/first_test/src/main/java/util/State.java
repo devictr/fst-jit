@@ -1,36 +1,31 @@
 package util;
 
 /**
- * 
  * From sphinx4 project https://github.com/cmusphinx/sphinx4
- *
- * Copyright 1999-2012 Carnegie Mellon University.  
- * Portions Copyright 2002 Sun Microsystems, Inc.  
+ * <p>
+ * Copyright 1999-2012 Carnegie Mellon University.
+ * Portions Copyright 2002 Sun Microsystems, Inc.
  * Portions Copyright 2002 Mitsubishi Electric Research Laboratories.
  * All Rights Reserved.  Use is subject to license terms.
- * 
+ * <p>
  * See the file "license.terms" for information on usage and
- * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * redistribution of this file, and for a DISCLAIMER OF ALL
  * WARRANTIES.
- *
+ * <p>
  * original author John Salatas
- *
  */
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class State implements Comparable<State> {
 
     protected int id = -1;
-
-    private float fnlWeight;
-
-    private ArrayList<Arc> arcs = null;
-
     protected int initialNumArcs = -1;
-
+    private float fnlWeight;
+    private ArrayList<Arc> arcs = null;
     private boolean isFinalState = false;
 
     public State() {
@@ -57,12 +52,12 @@ public class State implements Comparable<State> {
         return fnlWeight;
     }
 
-    public void setArcs(ArrayList<Arc> arcs) {
-        this.arcs = arcs;
-    }
-
     public void setFinalWeight(float fnlfloat) {
         this.fnlWeight = fnlfloat;
+    }
+
+    public void setArcs(ArrayList<Arc> arcs) {
+        this.arcs = arcs;
     }
 
     public int getId() {
@@ -139,29 +134,29 @@ public class State implements Comparable<State> {
 
     @Override
     public int compareTo(State otherState) {
-        if ( this.arcs.size() == 0 ) {
+        if (this.arcs.size() == 0) {
             return 42;
-        } else if ( otherState.getNumArcs() == 0 ) {
+        } else if (otherState.getNumArcs() == 0) {
             return -42;
         }
 
-        return (scanArcsToFind(otherState, this))? -42 : 42;
+        return (scanArcsToFind(otherState, this)) ? -42 : 42;
     }
 
     private boolean scanArcsToFind(State stateToFind,
-            State currentState) {
-        if(currentState.getNumArcs() == 0) {
+                                   State currentState) {
+        if (currentState.getNumArcs() == 0) {
             return false;
         }
-        if ( currentState.equals(stateToFind) ) {
+        if (currentState.equals(stateToFind)) {
             return true;
         }
 
         for (int i = 0; i < currentState.getNumArcs(); i++) {
-            if ( scanArcsToFind(stateToFind, currentState.getArc(i)
-                        .getNextState())) {
+            if (scanArcsToFind(stateToFind, currentState.getArc(i)
+                    .getNextState())) {
                 return true;
-                        }
+            }
         }
 
         return false;
@@ -184,6 +179,10 @@ public class State implements Comparable<State> {
             }
         }
         return null;
+    }
+
+    public List<Arc> getArcs() {
+        return arcs;
     }
 
 }

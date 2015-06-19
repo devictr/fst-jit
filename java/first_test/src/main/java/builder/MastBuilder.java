@@ -4,7 +4,10 @@ import util.Arc;
 import util.Fst;
 import util.State;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Minimal Acyclic Subsequential Transducer builder class
@@ -37,21 +40,20 @@ public class MastBuilder {
 
         int maxWordLength = getMaxWordLength(pairs);
         int prefixLengthPlusOne, j;
-        Map<Integer, State> dic = new HashMap<Integer, State>();
         State[] tempStates = new State[maxWordLength];
         for (int i = 0; i < maxWordLength; i++) {
             tempStates[i] = new State();
         }
         String previousWord = "";
-        String commonPrefix, wordSuffix;
-
+        String currentWord = "";
+        int currentOutput;
 
         /*
         Loop for the words in the input list
          */
         for (InputOutputPair pair : pairs) {
-            String currentWord = pair.getInput();
-            String currentOutput = pair.getOutput();
+            currentWord = pair.getInput();
+            currentOutput = pair.getOutput();
             /*
             The following loop calculate the length of the longest common prefix of currentWord and previousWord
              */
@@ -63,24 +65,41 @@ public class MastBuilder {
             /*
             We minimize the states from the suffix of the previous word
              */
-            for (i = previousWord.length(); i <= prefixLengthPlusOne; i--) {
+            for (i = previousWord.length() - 1; i >= prefixLengthPlusOne; i--) {
                 setTransition(tempStates[i - 1], previousWord.charAt(i), findMinimized(tempStates[i]));
             }
             /*
             This loop initializes the tail states for the current word
              */
-            for (i = prefixLengthPlusOne; i <= currentWord.length(); i++) {
+            for (i = prefixLengthPlusOne; i < currentWord.length(); i++) {
                 clearState(tempStates[i]);
                 setTransition(tempStates[i - 1], currentWord.charAt(i), tempStates[i]);
             }
 
             if (currentWord != previousWord) {
-                tempStates[currentWord.length()].setFinalState();
+                tempStates[currentWord.length() - 1].setFinalState();
                 //setOutput(tempStates[currentWord.length()], "")
             }
 
             for (j = 1; j < prefixLengthPlusOne; j++) {
-                commonPrefix = intersect(getOutput(tempStates[j - 1], currentWord.charAt(j)), currentOutput);
+                if (tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)) != null) {
+                    if (tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)).getOlabel() == currentOutput) {
+                        currentOutput = 0;
+                        break;
+                    }
+                    int outSuff;
+                    outSuff = tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)).getOlabel();
+                    tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)).setOlabel(0);
+                    for (char c : currentWord.toCharArray()) {
+                        if (tempStates[j].getArcForTarget((int) c) != null) {
+                            setOutput(tempStates[j], c, outSuff);
+                        }
+                    }
+                }
+
+
+
+                /*commonPrefix = intersect(getOutput(tempStates[j - 1], currentWord.charAt(j)), currentOutput);
                 wordSuffix = getOutput(tempStates[j - 1], currentWord.charAt(j)).replace(commonPrefix, "");
                 setOutput(tempStates[j - 1], currentWord.charAt(j), commonPrefix);
 
@@ -93,21 +112,32 @@ public class MastBuilder {
                 if (tempStates[j].isFinalState()) {
                     Set<String> tempSet = new HashSet<String>();
                     // bloqué ici (cf. ligne 58 pseudocode)
-                }
+                }*/
             }
-
+            if (currentWord != previousWord) {
+                setOutput(tempStates[prefixLengthPlusOne - 1], currentWord.charAt(prefixLengthPlusOne - 1), currentOutput);
+            }
+            previousWord = currentWord;
 
         }
+        for (int i = currentWord.length() - 1; i >= 1; i--) {
+            setTransition(tempStates[i - 1], previousWord.charAt(i), findMinimized(tempStates[i]));
+
+        }
+        fst.setStart(tempStates[0]);
+        fst.setStates(new ArrayList<State>(Arrays.asList(tempStates)));
         return fst;
     }
 
-    private void setOutput(State state, char c, String output) {
+    private void setOutput(State state, char c, int output) {
         Arc arc = state.getArcForTarget((int) c);
-        arc.setOlabel(Integer.parseInt(output)); // Only OK if we use ints as output values
+        if (arc != null) {
+            arc.setOlabel(output);
+        }
     }
 
-    private String getOutput(State state, char c) {
-        return "" + state.getArcForTarget((int) c).getOlabel();
+    private int getOutput(State state, char c) {
+        return state.getArcForTarget((int) c).getOlabel();
     }
 
     private State findMinimized(State state) {

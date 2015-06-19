@@ -6,18 +6,18 @@ package builder;
 public class InputOutputPair {
     private String input;
 
-    private String output;
+    private int output;
 
-    public InputOutputPair(String input, String output) {
+    public InputOutputPair(String input, int output) {
         this.input = input;
         this.output = output;
     }
 
-    public String getOutput() {
+    public int getOutput() {
         return output;
     }
 
-    public void setOutput(String output) {
+    public void setOutput(int output) {
         this.output = output;
     }
 
