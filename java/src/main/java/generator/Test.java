@@ -8,8 +8,6 @@ public class Test {
 
     public static void main (String[] args) {
 
-        Launcher.run();
-
         String strInput = "";
 
         if(args.length > 0) {
