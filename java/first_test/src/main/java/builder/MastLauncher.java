@@ -13,7 +13,7 @@ import java.util.List;
 public class MastLauncher {
 
     public static void main(String... args) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream("/Users/devict/Software/FST/fst-jit/java/first_test/src/main/resources/wordlist")));
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         List<InputOutputPair> pairs = new ArrayList<InputOutputPair>();
         String s;
         String[] inputArray;
