@@ -113,7 +113,8 @@ public class Convert {
             for (int j = 0; j < fst.getState(i).getNumArcs(); j++) {
                 int target = fst.getState(i).getArc(j).getNextState().getId();
                 char label = (char) fst.getState(i).getArc(j).getIlabel();
-                out.println("\t" + fst.getState(i).getId() + " -> " + target + " [label = \"" + label + "\", fontsize = 14];");
+                String output = fst.getState(i).getArc(j).getOlabel() == 0 ? "": "/"+fst.getState(i).getArc(j).getOlabel();
+                out.println("\t" + fst.getState(i).getId() + " -> " + target + " [label = \"" + label + output +"\", fontsize = 14];");
             }
         }
         out.println("}");

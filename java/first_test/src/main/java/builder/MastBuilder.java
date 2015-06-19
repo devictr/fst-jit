@@ -4,10 +4,7 @@ import util.Arc;
 import util.Fst;
 import util.State;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Minimal Acyclic Subsequential Transducer builder class
@@ -16,6 +13,7 @@ import java.util.List;
 public class MastBuilder {
 
     private Fst fst;
+    private Map<State, List<State>> stateDict;
 
     public MastBuilder() {
         fst = new Fst();
@@ -39,9 +37,10 @@ public class MastBuilder {
     public Fst buildMast(List<InputOutputPair> pairs) {
 
         int maxWordLength = getMaxWordLength(pairs);
-        int prefixLengthPlusOne, j;
-        State[] tempStates = new State[maxWordLength];
-        for (int i = 0; i < maxWordLength; i++) {
+        int prefixLength, j;
+        stateDict = new HashMap<>();
+        State[] tempStates = new State[maxWordLength + 1];
+        for (int i = 0; i < maxWordLength + 1; i++) {
             tempStates[i] = new State();
         }
         String previousWord = "";
@@ -54,78 +53,87 @@ public class MastBuilder {
         for (InputOutputPair pair : pairs) {
             currentWord = pair.getInput();
             currentOutput = pair.getOutput();
-            /*
-            The following loop calculate the length of the longest common prefix of currentWord and previousWord
-             */
-            int i = 1;
+
+            int i = 0;
             while ((i < currentWord.length()) && (i < previousWord.length()) && (previousWord.charAt(i) == currentWord.charAt(i))) {
                 i++;
             }
-            prefixLengthPlusOne = i;
-            /*
-            We minimize the states from the suffix of the previous word
-             */
-            for (i = previousWord.length() - 1; i >= prefixLengthPlusOne; i--) {
-                setTransition(tempStates[i - 1], previousWord.charAt(i), findMinimized(tempStates[i]));
-            }
-            /*
-            This loop initializes the tail states for the current word
-             */
-            for (i = prefixLengthPlusOne; i < currentWord.length(); i++) {
-                clearState(tempStates[i]);
-                setTransition(tempStates[i - 1], currentWord.charAt(i), tempStates[i]);
-            }
+            prefixLength = i;
 
-            if (currentWord != previousWord) {
-                tempStates[currentWord.length() - 1].setFinalState();
-                //setOutput(tempStates[currentWord.length()], "")
-            }
-
-            for (j = 1; j < prefixLengthPlusOne; j++) {
-                if (tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)) != null) {
-                    if (tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)).getOlabel() == currentOutput) {
-                        currentOutput = 0;
-                        break;
-                    }
-                    int outSuff;
-                    outSuff = tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)).getOlabel();
-                    tempStates[j - 1].getArcForTarget(currentWord.charAt(j - 1)).setOlabel(0);
-                    for (char c : currentWord.toCharArray()) {
-                        if (tempStates[j].getArcForTarget((int) c) != null) {
-                            setOutput(tempStates[j], c, outSuff);
+            for (i = previousWord.length(); i > prefixLength; i--) {
+                State newState = null;
+                if (stateDict.containsKey(tempStates[i])) {
+                    for (State state : stateDict.get(tempStates[i])) {
+                        if (state.equals(tempStates[i])) {
+                            newState = state;
+                            break;
                         }
                     }
                 }
-
-
-
-                /*commonPrefix = intersect(getOutput(tempStates[j - 1], currentWord.charAt(j)), currentOutput);
-                wordSuffix = getOutput(tempStates[j - 1], currentWord.charAt(j)).replace(commonPrefix, "");
-                setOutput(tempStates[j - 1], currentWord.charAt(j), commonPrefix);
-
-                for (char c : currentWord.toCharArray()) {
-                    if (tempStates[j].getArcForTarget((int) c) != null) {
-                        setOutput(tempStates[j], c, wordSuffix + getOutput(tempStates[j], c));
+                if (newState == null) {
+                    newState = tempStates[i];
+                    fst.addState(newState);
+                    if (stateDict.containsKey(newState)) {
+                        stateDict.get(newState).add(newState);
+                    } else {
+                        List<State> stateList = new ArrayList<>();
+                        stateList.add(newState);
+                        stateDict.put(newState, stateList);
                     }
                 }
-
-                if (tempStates[j].isFinalState()) {
-                    Set<String> tempSet = new HashSet<String>();
-                    // bloqué ici (cf. ligne 58 pseudocode)
-                }*/
+                tempStates[i] = new State();
+                setTransition(tempStates[i - 1], previousWord.charAt(i - 1), newState);
             }
-            if (currentWord != previousWord) {
-                setOutput(tempStates[prefixLengthPlusOne - 1], currentWord.charAt(prefixLengthPlusOne - 1), currentOutput);
+            for (i = prefixLength + 1; i <= currentWord.length(); i++) {
+                setTransition(tempStates[i - 1], currentWord.charAt(i - 1), tempStates[i]);
+            }
+            if (!Objects.equals(currentWord, previousWord)) {
+                tempStates[currentWord.length()].setFinalState();
+            }
+            for (int k = 1; k < prefixLength + 1; k++) {
+                if (tempStates[k - 1].getOutputForInput(currentWord.charAt(k - 1)) == currentOutput) {
+                    currentOutput = 0;
+                    break;
+                }
+                int outSuff = tempStates[k - 1].getOutputForInput(currentWord.charAt(k - 1));
+                tempStates[k - 1].removeOutputForInput(currentWord.charAt(k - 1));
+                for (char c : tempStates[k].getTransitionsInputs()) {
+                    setOutput(tempStates[k], c, outSuff);
+                }
+
+            }
+            if (!Objects.equals(currentWord, previousWord)) {
+                setOutput(tempStates[prefixLength], currentWord.charAt(prefixLength), currentOutput);
             }
             previousWord = currentWord;
-
         }
-        for (int i = currentWord.length() - 1; i >= 1; i--) {
-            setTransition(tempStates[i - 1], previousWord.charAt(i), findMinimized(tempStates[i]));
 
+        for (int i = previousWord.length(); i > 0; i--) {
+            State newState = null;
+            if (stateDict.containsKey(tempStates[i])) {
+                for (State state : stateDict.get(tempStates[i])) {
+                    if (state.equals(tempStates[i])) {
+                        newState = state;
+                        break;
+                    }
+                }
+            }
+            if (newState == null) {
+                newState = tempStates[i];
+                tempStates[i] = new State();
+                fst.addState(newState);
+                if (stateDict.containsKey(newState)) {
+                    stateDict.get(newState).add(newState);
+                } else {
+                    List<State> stateList = new ArrayList<State>();
+                    stateList.add(newState);
+                    stateDict.put(newState, stateList);
+                }
+            }
+            setTransition(tempStates[i - 1], previousWord.charAt(i - 1), newState);
         }
         fst.setStart(tempStates[0]);
-        fst.setStates(new ArrayList<State>(Arrays.asList(tempStates)));
+        fst.addState(tempStates[0]);
         return fst;
     }
 

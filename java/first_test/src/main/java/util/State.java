@@ -15,10 +15,7 @@ package util;
  * original author John Salatas
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class State implements Comparable<State> {
 
@@ -54,10 +51,6 @@ public class State implements Comparable<State> {
 
     public void setFinalWeight(float fnlfloat) {
         this.fnlWeight = fnlfloat;
-    }
-
-    public void setArcs(ArrayList<Arc> arcs) {
-        this.arcs = arcs;
     }
 
     public int getId() {
@@ -185,4 +178,43 @@ public class State implements Comparable<State> {
         return arcs;
     }
 
+    public void setArcs(ArrayList<Arc> arcs) {
+        this.arcs = arcs;
+    }
+
+    public int getOutputForInput(char c) {
+        for (Arc arc : arcs) {
+            if (arc.getIlabel() == (int) c) {
+                return arc.getOlabel();
+            }
+        }
+        throw new NoSuchElementException("No output for char " + c + " on State " + this);
+    }
+
+    public void removeOutputForInput(char c) {
+        boolean removed = false;
+        for (Arc arc : arcs) {
+            if (arc.getIlabel() == (int) c) {
+                arc.setOlabel(0);
+                removed = true;
+            }
+        }
+        if (!removed) {
+            throw new NoSuchElementException("No output for char " + c + " on State " + this);
+        }
+    }
+
+    public char[] getTransitionsInputs() {
+        char[] inputs = new char[arcs.size()];
+        for (int i = 0; i < arcs.size(); i++) {
+            inputs[i] = (char) arcs.get(i).getIlabel();
+        }
+        return inputs;
+    }
+
+    public void clear() {
+        this.arcs = new ArrayList<>();
+        this.isFinalState = false;
+        this.id = -1;
+    }
 }

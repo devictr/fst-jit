@@ -4,24 +4,20 @@ label = "";
 center = 1;
 ranksep = "0.4";
 nodesep = "0.25";
--1 [label = "-1", shape = circle, style = bold, fontsize = 14]
-	-1 -> 4 [label = "o", fontsize = 14];
-	-1 -> 4 [label = "o", fontsize = 14];
-4 [label = "4", shape = circle, style = bold, fontsize = 14]
-	4 -> 1 [label = "h", fontsize = 14];
-	4 -> 1 [label = "h", fontsize = 14];
-	4 -> 1 [label = "s", fontsize = 14];
-	4 -> 1 [label = "s", fontsize = 14];
-1 [label = "1", shape = circle, style = bold, fontsize = 14]
-	1 -> 0 [label = "n", fontsize = 14];
-	1 -> 0 [label = "n", fontsize = 14];
-	1 -> 0 [label = "e", fontsize = 14];
-	1 -> 0 [label = "e", fontsize = 14];
 0 [label = "0", shape = doublecircle, style = bold, fontsize = 14]
-	0 -> 3 [label = "p", fontsize = 14];
-	0 -> 3 [label = "p", fontsize = 14];
-3 [label = "3", shape = circle, style = bold, fontsize = 14]
-	3 -> 2 [label = "h", fontsize = 14];
-	3 -> 2 [label = "h", fontsize = 14];
+1 [label = "1", shape = circle, style = bold, fontsize = 14]
+	1 -> 0 [label = "h", fontsize = 14];
+	1 -> 0 [label = "h", fontsize = 14];
 2 [label = "2", shape = doublecircle, style = bold, fontsize = 14]
+3 [label = "3", shape = circle, style = bold, fontsize = 14]
+	3 -> 1 [label = "t/1", fontsize = 14];
+	3 -> 1 [label = "t", fontsize = 14];
+	3 -> 2 [label = "b/2", fontsize = 14];
+	3 -> 2 [label = "b", fontsize = 14];
+4 [label = "4", shape = circle, style = bold, fontsize = 14]
+	4 -> 3 [label = "o", fontsize = 14];
+	4 -> 3 [label = "o", fontsize = 14];
+5 [label = "5", shape = circle, style = bold, fontsize = 14]
+	5 -> 4 [label = "M", fontsize = 14];
+	5 -> 4 [label = "M", fontsize = 14];
 }
