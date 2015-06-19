@@ -50,11 +50,17 @@ public class MastBuilder {
         String previousWord = "";
         String currentWord;
         int currentOutput;
-
+        double counter = 0.;
+        int percentage;
+        System.out.println("Starting to build FST using the MAST algorithm");
         /*
         Loop for the words in the input list
          */
         for (InputOutputPair pair : pairs) {
+            if (counter % 100000 == 0) {
+                percentage = (int) ((counter / pairs.size()) * 100);
+                System.out.println("[MastBuilder] FST Build status : " + percentage + "%");
+            }
             currentWord = pair.getInput();
             currentOutput = pair.getOutput();
 
@@ -110,6 +116,7 @@ public class MastBuilder {
                 setOutput(tempStates[prefixLength], currentWord.charAt(prefixLength), currentOutput);
             }
             previousWord = currentWord;
+            counter++;
         }
 
         for (int i = previousWord.length(); i > 0; i--) {
