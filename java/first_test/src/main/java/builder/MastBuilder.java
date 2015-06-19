@@ -28,6 +28,10 @@ public class MastBuilder {
     }
 
     private void setTransition(State current, char ch, State target) {
+        Arc arcForTarget = current.getArcForTarget((int) ch);
+        if (arcForTarget != null) {
+            return;
+        }
         Arc arc = new Arc();
         arc.setNextState(target);
         arc.setIlabel(ch);
@@ -44,7 +48,7 @@ public class MastBuilder {
             tempStates[i] = new State();
         }
         String previousWord = "";
-        String currentWord = "";
+        String currentWord;
         int currentOutput;
 
         /*
