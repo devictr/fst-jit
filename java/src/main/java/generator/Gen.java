@@ -1,19 +1,16 @@
 package generator;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class Gen {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
         cw.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, "GenBCode", null, "java/lang/Object", null);
 
@@ -38,13 +35,13 @@ public class Gen {
 
         byte[] generatedByteCode = cw.toByteArray();
 
-        try {
-            Path path = Paths.get("GenBCode.class");
-            Files.write(path, generatedByteCode);
-        } catch(Exception e) {
-            System.out.println("Cannot write to file");
-        }
+        
+        DynamicClassLoader l = new DynamicClassLoader();
+        l.putClass("GenBCode", generatedByteCode);
 
-        //System.out.println(GenBCode.run());
+        Class<?> GenBCode = l.loadClass("GenBCode");
+        System.out.println(GenBCode.getMethod("run").invoke(null));
     }
+
 }
+
