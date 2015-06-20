@@ -1,0 +1,93 @@
+==== Ecriture manuelle du bytecode ====
+
+On part du principe qu'on garde notre algorithme existant pour créer du java, mais qu'on veut maintenant créer du bytecode.
+
+La suite ne s'intéresse qu'on contenu de la méthode compute(), le reste étant juste l'initialisation de la classe.
+
+on peut diviser le java en une poignée de "section" qui se répète.
+
+=== Notes ===
+La première lettre d'une mnémonique d'instruction bytecode est (dans la grande majorité des cas), le type sur lequelle l'instruction courante se base (i pour integer, f pour float, a pour referance, ...)
+cf : https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings
+
+Dans la suite, on aura toujours 3 variables locales :
+    0 : int[] token     ==> le token donné en argument de la fonction
+    1 : int pos         ==> la position courante dans le token
+    2 : float result    ==> le résultat final incrémenté lorsqu'on traverse un arc avec un poids non nul
+
+== Initialisation des variables ==
+On avait, au début de la méthode :
+    int pos=0
+    float result=0f;
+
+Il faut donc faire :
+    iconst_0  // pousse 0 (integer) sur la stack
+    istore_1  // pop la stack et enregistre la valeur dans la variable local 1 (pos)
+    fconst_0  // pousse 0 (float) sur la stack
+    fstore_2  // pop la stack et enregistre la valeur dans la variable local 2 (result)
+
+
+== test d'overflow ==
+Pour chaque state, on avait :
+    if(pos>=token.length) { return -1;}
+
+On remplace cela par :
+    iload_1 // push la valeur de "pos"
+    aload_0 // push la reference de "token"
+    arraylength // Pop la reference de "token" et en donne sa longeur
+    if_cmpge (ERR) // Si (pos>=token.length) alors goto (ERR) (cf ci-dessous)
+
+== erreurs ==
+Lorsque l'on rencontre un cas d'erreur, on veut faire un :
+    return -1;
+
+On veut donc avoir quelque part :
+    ldc #2  // push la valeur numéro 2 de la "constant pool"
+    freturn // retourne la valeur au sommet de la stack
+
+/!\ on a donc besoin que la 2e valeur de la constant pool soit "-1" (float).
+    Si ce n'est pas la 2e valeur, il faut changer le #2
+
+NB: utiliser toujours la même addresse pour les cas d'erreurs est plus optimisé en terme de taille de la classe par rapport à ce qui est produit par javac
+
+== Switch ==
+On a de nombreux switch dans le java :
+    switch(token[pos++])
+
+On a donc d'une part le switch, et d'autre part le pos++ :
+    aload_0 // push la reference de "token"
+    iload_1 // push la valeur de "pos"
+    iinc 1 1 // incrémente de "1" la variable locale "1" (pos)
+    iaload // pop les 2 dernière valeur de la stack pour push la i-ème (n-1) case du tableau (n-2), en l'occurence token[pos]
+    lookupswitch {
+        (val_X): (pos_label_X) // correspond aux "case"
+        (val_Y): (pos_label_Y) // exemple : "65: 42" si le goto pour la lettre 'A' (65) est l'instruction numéro 42
+        ...
+        default: (ERR)         // default: return -1
+    }
+
+== Incrément du total ==
+Lorsque le poids d'un arc est != 0, on fait en java :
+    result+=21.0f;
+
+On va remplacer ça par :
+   fload_2  // push "result" 
+   (
+        fconst_1 // si le poids est 1
+        ## OR ##
+        ldc #N  // sinon, et il faut ajouter cela dans la constant pool si ce n'est pas déjà présent
+   )
+   fadd  // additionne les deux dernières valeurs de la stack et push le result
+   fstore_2 // save le résultat 
+
+== State finaux ==
+Lorsque l'on est sur un state final, on fait en java :
+    return (pos != token.length) ? -1 : result;
+
+On va utiliser notre (ERR) pour factoriser le code :
+    iload_1         // push la valeur de "pop"
+    aload_0         // push la référence de "token"
+    arraylength     // pop et push la taille de "token"
+    if_cmpne (ERR)  // si (pos != token.length) goto (ERR)
+    fload_2         // push la valeur de "result"
+    freturn         // retourne la valeur au sommet de la stack
