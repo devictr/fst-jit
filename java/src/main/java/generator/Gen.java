@@ -1,3 +1,5 @@
+package generator;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -5,6 +7,7 @@ import java.nio.file.Paths;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
 
@@ -42,6 +45,6 @@ public class Gen {
             System.out.println("Cannot write to file");
         }
 
-        System.out.println(GenBCode.run());
+        //System.out.println(GenBCode.run());
     }
 }
