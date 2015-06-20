@@ -35,7 +35,7 @@ public class Gen {
 
         byte[] generatedByteCode = cw.toByteArray();
 
-        
+
         DynamicClassLoader l = new DynamicClassLoader();
         l.putClass("GenBCode", generatedByteCode);
 
