@@ -1,0 +1,29 @@
+======== Construction des FST ========
+Avant de compiler nos FST, il faut bien sûr les construire à partir de données d'entrée et de données de sortie.
+
+Pour ce faire, nous avons décidé d'utiliser un algorithme de construction directe de "Minimal acyclic subsequential transducers". Il s'agit de l'algorithme utilisé dans le projet Apache Lucene, pour la construction de leurs FST. Il permet de construire des transducteurs minimums pour des entrées et sorties données. Nous pouvons donc avoir des données de la forme :
+
+In	Out
+-----------
+John	1
+Moth	2
+Mob	3
+
+Note : Les mots en entrées doivent être triés dans l'ordre lexicographique pour que l'algorithmefonctionne.
+
+Cet algorithme nous permet d'être sûrs que le FST construit associera de manière unique la sortie 1 au mot John, la sortie 2 au mot Moth et la sortie 3 au mot Mob. Et ce même pour des millions d'entrées de cette forme.
+
+De plus, étant utilisé par Lucene, cela nous permettra d'avoir une équivalence entre les FST que nous construisons et ceux construits par Lucene, afin qu'il soit possible de comparer les performances de notre méthode et celle de Lucene.
+
+Fonctionnement de l'algorithme
+------------------------------
+
+L'algorithme est issu d'un papier de recherche qui date de 2001, écrit par Denis Maurel et et Stoyan Mihov. 
+Il fonctionne pour tout type de données d'entrée/sortie, mais nous l'avons adapté au cas ou les sorties sont des nombres entiers par souci de simplicité.
+L'algorithme parcourt les mots en entrée un par un, et cherche un préfixe commun entre le mot actuel et le mot du tour de boucle précédent. En déterminant ce préfixe commun, il est ensuite possible de réutiliser des états qui auraient déjà été créés lors du traitement d'un mot précédent (un peu comme dans un jeu de Scrabble). Petit à petit, on arrive donc à construire un Trie correct et à s'assurer que la valeur de sortie de chaque chaîne est unique.
+
+# Est-ce que l'explication est suffisante ?
+
+"Copie du pseudocode" ?
+
+Direct Construction of Minimal Acyclic Subsequential Transducers (2001) http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.24.3698
