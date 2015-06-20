@@ -1,3 +1,7 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -30,5 +34,14 @@ public class Gen {
         cw.visitEnd();
 
         byte[] generatedByteCode = cw.toByteArray();
+
+        try {
+            Path path = Paths.get("GenBCode.class");
+            Files.write(path, generatedByteCode);
+        } catch(Exception e) {
+            System.out.println("Cannot write to file");
+        }
+
+        System.out.println(GenBCode.run());
     }
 }
