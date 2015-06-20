@@ -1,5 +1,6 @@
 package builder;
 
+import generator.FstGenerator;
 import util.Convert;
 import util.Fst;
 
@@ -24,6 +25,14 @@ public class MastLauncher {
         }
         MastBuilder builder = new MastBuilder();
         Fst fst = builder.buildMast(pairs);
+        FstGenerator fstGenerator = new FstGenerator();
+        StringBuffer stringBuffer = fstGenerator.compute(fst.getStart(), "GeneratedFst");
+        try (BufferedWriter out = new BufferedWriter(new FileWriter("GeneratedFst.java"))) {
+            out.write(stringBuffer.toString());
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Convert.exportFstToDot(fst, "test.dot");
 
     }
