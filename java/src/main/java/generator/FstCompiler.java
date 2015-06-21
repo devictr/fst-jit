@@ -11,6 +11,8 @@ public class FstCompiler {
     private final Fst fst;
     private GeneratorAdapter ga;
 
+    private errorLabel;
+
     public FstCompiler(Fst fst, GeneratorAdapter ga) {
         this.fst = fst;
         this.ga = ga;
@@ -18,5 +20,64 @@ public class FstCompiler {
 
     public void compile() {
         // Switch generation etc. here
+        State initState = fst.getStart();
+
+        // pos=0;
+        ga.push(0);
+        ga.storeLocal(1);
+        // result=0f;
+        ga.push(0f);
+        ga.storeLocal(2);
+
+        generateCases(initState);
+    }
+
+    private void generateCases(State currentState) {
+        if( currentState.getNumArcs() > 0) {
+            // if(pos>=token.length) {return -1;}
+            generateTokenLengthTest();
+
+            // switch(token[pos++])
+            ga.loadLocal(0);
+            ga.loadLocal(1);
+            ga.iinc(1,1);
+            ga.arrayLoad(Type.INT_TYPE);
+
+            TableSwitchGenerator tsg = new TableSwitchGenerator();
+            List<Integer> keys = new ArrayList<>();
+            Label switchEnd;
+
+            for (int i = 0; i < currentState.getNumArcs(); i++) {
+                // case '<char>' :
+                keys.add(currentState.getArc(i).getIlabel());
+                if (currentState.getArc(i).getWeight() != 0f) {
+                    // result += <weight>;
+                    ga.loadLocal(2);
+                    ga.push(currentState.getArc(i).getWeight());
+                    ga.math(GeneratorAdapter.ADD, Type.FLOAT_TYPE);
+                    ga.storeLocal(2);
+                }
+
+                generateCases(currentState.getArc(i).getNextState());
+            }
+
+            // default : return -1
+            tsg.generateDefault();
+
+            switchEnd = ga.mark();
+        } else {
+            // return (pos!=token.length) ? -1 : result;
+            generateTokenLengthTest();
+            ga.loadLocal(2);
+            ga.returnValue();
+        }
+    }
+
+    private void generateTokenLengthTest() {
+        // if(pos>=token.length) {return -1;}
+        ga.loadLocal(1);
+        ga.loadLocal(0);
+        ga.arrayLength();
+        ga.ifICmp(GeneratorAdapter.NE, errorLabel);
     }
 }
