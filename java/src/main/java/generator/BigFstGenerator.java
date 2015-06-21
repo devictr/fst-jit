@@ -20,10 +20,11 @@ public class BigFstGenerator {
 
         appendWithTab("int pos=0;", 2);
         appendWithTab("float result=0f;", 2);
-
-        generateCases(initState, 2);
+        appendWithTab("return state_0(token, pos, result);", 2);
 
         appendWithTab("}", 1);
+
+        generateCases(initState, 2);
 
         append("}");
         System.out.println("[FstGenerator] Successfully transformed fst to " + className + ".java");
@@ -32,6 +33,8 @@ public class BigFstGenerator {
 
 
     private void generateCases(State currentState, int tab) {
+        append("\n\tprivate static float state_" + currentState.getId() +
+                "(int[] token, int pos, float result) {");
        
         if( currentState.getNumArcs() > 0) { 
             generateTokenLengthTest(tab);
@@ -49,6 +52,7 @@ public class BigFstGenerator {
         } else {
             appendWithTab("return (pos!=token.length) ? -1 : result;", tab);
         }
+        appendWithTab("}", 1);
     }
 
     private void generateTokenLengthTest(int tab) {
