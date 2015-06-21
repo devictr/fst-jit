@@ -41,6 +41,7 @@ public class BytecodeCompiler {
         ga.push(42);
         (new FstCompiler(fst, ga)).compile();
         // END important part
+
         ga.returnValue();
         ga.endMethod();
     }
