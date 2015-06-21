@@ -1,6 +1,7 @@
 package generator;
 
 import util.State;
+import java.util.ArrayList;
 
 public class BigFstGenerator {
 
@@ -33,6 +34,8 @@ public class BigFstGenerator {
 
 
     private void generateCases(State currentState) {
+        List<State> nextStates = new ArrayList<>();
+
         append("\n\tprivate static float state_" + currentState.getId() +
                 "(int[] token, int pos, float result) {");
        
@@ -44,7 +47,9 @@ public class BigFstGenerator {
                 if (currentState.getArc(i).getWeight() != 0f) {
                     appendWithTab("result+=" + currentState.getArc(i).getWeight() + "f;", 4);
                 }
-                generateCases(currentState.getArc(i).getNextState(), 4);
+                appendWithTab("return state_" + currentState.getArc(i).getNextState().getId() +
+                        "(token, pos, result);", 4);
+                nextStates.add(currentState.getArc(i).getNextState());
             }
             appendWithTab("default:", 3);
             appendWithTab("return -1;", 4);
@@ -53,6 +58,10 @@ public class BigFstGenerator {
             appendWithTab("return (pos!=token.length) ? -1 : result;", 2);
         }
         appendWithTab("}", 1);
+
+        for (State next: nextStates) {
+            generateCases(next);
+        }
     }
 
     private void generateTokenLengthTest(int tab) {
