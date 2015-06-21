@@ -46,13 +46,17 @@ public class BigFstGenerator {
         for (int i = 0; i < currentState.getNumArcs(); i++) {
             appendWithTab("case " + currentState.getArc(i).getIlabel()  + ":", 3);
 
+            if (currentState.getArc(i).getOlabel() != 0) {
+                appendWithTab("result+=" + currentState.getArc(i).getOlabel() + "f;", 4);
+            }
+
+            if (currentState.getArc(i).getNextState().isFinalState()) {
+                appendWithTab("if(pos==token.length) {return result;}", 4);
+            }
+
             if( currentState.getArc(i).getNextState().getNumArcs() <= 0) {
                 appendWithTab("return (pos!=token.length) ? -1 : result;", 4);
                 continue;
-            }
-
-            if (currentState.getArc(i).getWeight() != 0f) {
-                appendWithTab("result+=" + currentState.getArc(i).getWeight() + "f;", 4);
             }
 
             appendWithTab("return state_" + currentState.getArc(i).getNextState().getId() +
