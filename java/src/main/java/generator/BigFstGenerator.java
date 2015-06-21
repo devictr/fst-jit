@@ -24,7 +24,7 @@ public class BigFstGenerator {
 
         appendWithTab("}", 1);
 
-        generateCases(initState, 2);
+        generateCases(initState);
 
         append("}");
         System.out.println("[FstGenerator] Successfully transformed fst to " + className + ".java");
@@ -32,25 +32,25 @@ public class BigFstGenerator {
     }
 
 
-    private void generateCases(State currentState, int tab) {
+    private void generateCases(State currentState) {
         append("\n\tprivate static float state_" + currentState.getId() +
                 "(int[] token, int pos, float result) {");
        
         if( currentState.getNumArcs() > 0) { 
-            generateTokenLengthTest(tab);
-            appendWithTab("switch(token[pos++]) {", tab);
+            generateTokenLengthTest(2);
+            appendWithTab("switch(token[pos++]) {", 2);
             for (int i = 0; i < currentState.getNumArcs(); i++) {
-                appendWithTab("case " + currentState.getArc(i).getIlabel()  + ":", tab+1); 
+                appendWithTab("case " + currentState.getArc(i).getIlabel()  + ":", 3); 
                 if (currentState.getArc(i).getWeight() != 0f) {
-                    appendWithTab("result+=" + currentState.getArc(i).getWeight() + "f;", tab+2);
+                    appendWithTab("result+=" + currentState.getArc(i).getWeight() + "f;", 4);
                 }
-                generateCases(currentState.getArc(i).getNextState(), tab+2);
+                generateCases(currentState.getArc(i).getNextState(), 4);
             }
-            appendWithTab("default:", tab+1);
-            appendWithTab("return -1;", tab+2);
-            appendWithTab("}", tab);
+            appendWithTab("default:", 3);
+            appendWithTab("return -1;", 4);
+            appendWithTab("}", 2);
         } else {
-            appendWithTab("return (pos!=token.length) ? -1 : result;", tab);
+            appendWithTab("return (pos!=token.length) ? -1 : result;", 2);
         }
         appendWithTab("}", 1);
     }
