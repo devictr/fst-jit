@@ -22,7 +22,7 @@ public class BigFstGenerator {
 
         appendWithTab("int pos=0;", 2);
         appendWithTab("float result=0f;", 2);
-        appendWithTab("return state_0(token, pos, result);", 2);
+        appendWithTab("return state_" + initState.getId() + "(token, pos, result);", 2);
 
         appendWithTab("}", 1);
 
