@@ -38,19 +38,24 @@ public class BigFstGenerator {
 
         append("\n\tprivate static float state_" + currentState.getId() +
                 "(int[] token, int pos, float result) {");
+
         generateTokenLengthTest(2);
         appendWithTab("switch(token[pos++]) {", 2);
         for (int i = 0; i < currentState.getNumArcs(); i++) {
             appendWithTab("case " + currentState.getArc(i).getIlabel()  + ":", 3);
+
             if( currentState.getArc(i).getNextState().getNumArcs() <= 0) {
                 appendWithTab("return (pos!=token.length) ? -1 : result;", 4);
                 continue;
             }
+
             if (currentState.getArc(i).getWeight() != 0f) {
                 appendWithTab("result+=" + currentState.getArc(i).getWeight() + "f;", 4);
             }
+
             appendWithTab("return state_" + currentState.getArc(i).getNextState().getId() +
                     "(token, pos, result);", 4);
+
             nextStates.add(currentState.getArc(i).getNextState());
         }
         appendWithTab("default:", 3);
