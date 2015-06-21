@@ -27,6 +27,12 @@ public class FstCompiler {
     public void compile() {
         // Switch generation etc. here
         State initState = fst.getStart();
+        // 0 : int[] token
+        ga.newLocal(Type.INT_TYPE);
+        // 1 : int pos
+        ga.newLocal(Type.INT_TYPE);
+        // 2 : float result
+        ga.newLocal(Type.FLOAT_TYPE);
 
         // pos=0;
         ga.push(0);
