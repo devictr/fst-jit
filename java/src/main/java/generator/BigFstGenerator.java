@@ -26,7 +26,8 @@ public class BigFstGenerator {
 
         appendWithTab("}", 1);
 
-        generateCases(initState);
+        List<State> doneStates = new ArrayList<>();
+        generateCases(initState, doneStates);
 
         append("}");
         System.out.println("[FstGenerator] Successfully transformed fst to " + className + ".java");
@@ -34,7 +35,7 @@ public class BigFstGenerator {
     }
 
 
-    private void generateCases(State currentState) {
+    private void generateCases(State currentState, List<State> doneStates) {
         List<State> nextStates = new ArrayList<>();
 
         append("\n\tprivate static float state_" + currentState.getId() +
@@ -65,7 +66,11 @@ public class BigFstGenerator {
         appendWithTab("}", 1);
 
         for (State next: nextStates) {
-            generateCases(next);
+            if (doneStates.contains(next)) {
+                continue;
+            }
+            generateCases(next, doneStates);
+            doneStates.add(next);
         }
     }
 
