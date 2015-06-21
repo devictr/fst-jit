@@ -38,7 +38,7 @@
                             <appendAssemblyId>false</appendAssemblyId>
                             <archive>
                                 <manifest>
-                                    <mainClass>generator.Gen</mainClass>
+                                    <mainClass>generator.BytecodeCompiler</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
