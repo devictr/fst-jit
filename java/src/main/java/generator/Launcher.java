@@ -14,7 +14,7 @@ public class Launcher {
         State state2 = test2();
         State state3 = test3();
         
-        FstGenerator fstGen = new FstGenerator();
+        BigFstGenerator fstGen = new BigFstGenerator();
 
         String classNameTest1 = "FstComputeTest1";
         String classNameTest2 = "FstComputeTest2";
