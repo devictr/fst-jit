@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by devict on 19/06/15.
  */
-public class MastLauncher {
+public class MainLauncher {
 
     private static final Options options = new Options();
 
