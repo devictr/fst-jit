@@ -38,8 +38,8 @@ public class FstGenerator {
             appendWithTab("switch(token[pos++]) {", tab);
             for (int i = 0; i < currentState.getNumArcs(); i++) {
                 appendWithTab("case " + currentState.getArc(i).getIlabel()  + ":", tab+1); 
-                if (currentState.getArc(i).getWeight() != 0f) {
-                    appendWithTab("result+=" + currentState.getArc(i).getWeight() + "f;", tab+2);
+                if (currentState.getArc(i).getOlabel() != 0) {
+                    appendWithTab("result+=" + currentState.getArc(i).getOlabel() + "f;", tab+2);
                 }
                 generateCases(currentState.getArc(i).getNextState(), tab+2);
             }
