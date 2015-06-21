@@ -145,6 +145,7 @@ public class MastBuilder {
         }
         fst.setStart(tempStates[0]);
         fst.addState(tempStates[0]);
+        System.out.println("[MastBuilder] FST Build status : 100%");
         return fst;
     }
 

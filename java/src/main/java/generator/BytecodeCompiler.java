@@ -5,6 +5,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 import org.objectweb.asm.commons.Method;
+import util.Fst;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -13,8 +14,10 @@ public class BytecodeCompiler {
     private String className;
     private ClassWriter classWriter;
     private byte[] generatedByteCode;
+    private Fst fst;
 
-    public BytecodeCompiler(String className) {
+    public BytecodeCompiler(Fst fst, String className) {
+        this.fst = fst;
         this.className = className;
         classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
     }
@@ -36,6 +39,7 @@ public class BytecodeCompiler {
         ga.visitCode();
         // BEGIN important part
         ga.push(42);
+        (new FstCompiler(fst, ga)).compile();
         // END important part
         ga.returnValue();
         ga.endMethod();
@@ -54,17 +58,13 @@ public class BytecodeCompiler {
     }
 
     public void compile() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        System.out.println("[BytecodeCompiler] Compiling FST to bytecode");
         initClass();
         createRunMethod();
         getBytecode();
         Class<?> loadedClass = loadClass();
         System.out.println(loadedClass.getMethod("run").invoke(null));
+        System.out.println("[BytecodeCompiler] Successfully compiled FST to bytecode");
     }
-
-    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        BytecodeCompiler bytecodeCompiler = new BytecodeCompiler("CompiledFST");
-        bytecodeCompiler.compile();
-    }
-
 }
 

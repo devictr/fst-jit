@@ -11,7 +11,7 @@ public class FstGenerator {
 
     public StringBuffer compute(State initState, String className) {
         strBuff = new StringBuffer();
-        
+        System.out.println("[FstGenerator] Transforming Fst to a java class");
         append("package generated;");
 
         append("public class " + className + " {");    
@@ -26,7 +26,7 @@ public class FstGenerator {
         appendWithTab("}", 1);
 
         append("}");
-
+        System.out.println("[FstGenerator] Successfully transformed fst to " + className + ".java");
         return strBuff;
     }
 
