@@ -41,6 +41,9 @@ public class FstGenerator {
                 if (currentState.getArc(i).getOlabel() != 0) {
                     appendWithTab("result+=" + currentState.getArc(i).getOlabel() + "f;", tab+2);
                 }
+                if (currentState.getArc(i).getNextState().isFinalState()) {
+                    appendWithTab("if(pos==token.length) {return result;}", tab+2);
+                }
                 generateCases(currentState.getArc(i).getNextState(), tab+2);
             }
             appendWithTab("default:", tab+1);
