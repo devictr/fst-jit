@@ -40,6 +40,10 @@ public class BigFstGenerator {
                 "(int[] token, int pos, float result) {");
        
         if( currentState.getNumArcs() > 0) { 
+            if( currentState.getArc(i).getNextState().getNumArcs() <= 0) {
+                appendWithTab("return (pos!=token.length) ? -1 : result;", 4);
+                continue;
+            }
             generateTokenLengthTest(2);
             appendWithTab("switch(token[pos++]) {", 2);
             for (int i = 0; i < currentState.getNumArcs(); i++) {
