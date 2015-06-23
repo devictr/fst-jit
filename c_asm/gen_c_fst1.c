@@ -6,8 +6,7 @@ int compute_fst(const char* token)
     int total=0;
 
 NODE_0 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'M':
         goto NODE_1;
     case 'P':
@@ -24,8 +23,7 @@ NODE_0 :
     }
 
 NODE_1 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'O':
         goto NODE_2;
     default:
@@ -33,8 +31,7 @@ NODE_1 :
     }
 
 NODE_2 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'T':
         total += 1;
         goto NODE_3;
@@ -45,8 +42,7 @@ NODE_2 :
     }
 
 NODE_3 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'H':
         goto NODE_9;
     default:
@@ -54,8 +50,7 @@ NODE_3 :
     }
 
 NODE_4 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'O':
         goto NODE_5;
     default:
@@ -63,8 +58,7 @@ NODE_4 :
     }
 
 NODE_5 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'P':
         goto NODE_9;
     default:
@@ -72,8 +66,7 @@ NODE_5 :
     }
 
 NODE_6 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'T':
         goto NODE_7;
     default:
@@ -81,8 +74,7 @@ NODE_6 :
     }
 
 NODE_7 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'O':
         total += 1;
         goto NODE_5;
@@ -93,8 +85,7 @@ NODE_7 :
     }
 
 NODE_8 :
-    pos++;
-    switch (token[pos-1]) {
+    switch (token[pos++]) {
     case 'R':
         goto NODE_9;
     default:
