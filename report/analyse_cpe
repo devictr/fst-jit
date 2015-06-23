@@ -1,0 +1,6 @@
+Nous pensons qu'il aurait été préférable de choisir un autre environnement que le java pour nous permettre d'avoir les meilleurs performances possible. En effet, il est très complexe dans le monde java de se rapprocher des couches basses, or pour viser le traitements de centaines de milliers, voire de millions de données par secondes, il aurait fallu pouvoir avoir un meilleur contrôle sur ce que le processeur éxecute.
+
+Nous nous sommes apperçu que le compilateur javac, pour transformer le java en bytecode est spécialement naïf. Il ne sais par exemple pas identifié le cas où on ferait deux "i++" d'affilé, et génère deux instructions "iinc N,1", au lieu d'un unique "iinc N,2". Bien que la JVM fasse du JIT au runtime, nous ne comprenons pas pourquoi ne pas essayer d'optimiser toute la chaine, y compris le bytecode intermédiaire.
+De plus, nous pensons que l'abstraction "object" entraine irrémiédiablement une sourtaine lourdeur, dont est dépourvu des languages comme le C.
+
+Les compilateurs C peuvent aussi se permettrent de faire de plus grosses optimisations spécifique pour tel ou tel plateforme. Ce qu'on perd en portabilité, on le gagne en performance, et pour ce genre de projet, cela aurait sûrement été préférable.
