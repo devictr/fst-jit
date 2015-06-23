@@ -489,6 +489,119 @@ méthode.
 
 \subsubsection{Le bytecode et la librairie asm}
 
+\paragraph{Ecriture manuelle du bytecode}
+~\\
+L'objectif ici est de garder notre algorithme existant pour créer du java,
+mais en l'adaptant pour créer du bytecode. Par ailleurs nous ne nous intéresseons
+qu'au contenu de la méthode compute(),
+le reste étant juste l'initialisation de la classe.
+
+\paragraph{Notes}
+~\\
+La première lettre d'une mnémonique d'instruction bytecode est (dans la grande majorité des cas), le type sur lequelle l'instruction courante se base (i pour integer, f pour float, a pour referance, ...).
+
+Dans la suite, on aura toujours 3 variables locales :
+\begin{itemize}
+    \item 0 : int[] token, le token donné en argument de la fonction
+    \item 1 : int pos, la position courante dans le token
+    \item 2 : float result, le résultat final incrémenté lorsqu'on traverse un arc avec un poids non nul
+\end{itemize}
+
+\paragraph{Initialisation des variables}
+~\\
+On avait, au début de la méthode :
+\begin{itemize}
+    \item int pos=0;
+    \item float result=0f;
+\end{itemize}
+~\\
+
+Il faut donc faire :
+\begin{itemize}
+    \item iconst\_0  \textcolor{blue}{// pousse 0 (integer) sur la stack}
+    \item istore\_1  \textcolor{blue}{// pop la stack et enregistre la valeur dans la variable local 1 (pos)}
+    \item fconst\_0  \textcolor{blue}{// pousse 0 (float) sur la stack}
+        \item fstore\_2  \textcolor{blue}{// pop la stack et enregistre la valeur dans la variable local 2 (result)}
+\end{itemize}
+
+\paragraph{Test d'overflow}
+~\\
+Pour chaque state, on avait :
+
+\lstinputlisting[style=customjava, caption=Test sur la taille du token, label=lst:test:token]{code/state.token}
+
+On remplace cela par :
+\begin{itemize}
+    \item iload\_1 \textcolor{blue}{// push la valeur de "pos"}
+    \item aload\_0 \textcolor{blue}{// push la reference de "token"}
+    \item arraylength \textcolor{blue}{// Pop la reference de "token" et en donne sa longeur}
+    \item if\_cmpge (ERR) \textcolor{blue}{// Si (pos>=token.length) alors goto (ERR) (cf ci-dessous)}
+\end{itemize}
+
+\paragraph{Erreurs}
+~\\
+Lorsque l'on rencontre un cas d'erreur, on veut faire un : return -1;
+
+On veut donc avoir quelque part :
+\begin{itemize}
+    \item ldc \#2  \textcolor{blue}{// push la valeur numéro 2 de la "constant pool"}
+    \item freturn \textcolor{blue}{// retourne la valeur au sommet de la stack}
+\end{itemize}
+
+On a donc besoin que la seconde valeur de la constant pool soit "-1" (float).
+Si ce n'est pas la seconde valeur, il faut changer le \#2
+
+Notons qu'utiliser toujours la même addresse pour les cas d'erreurs est plus optimisé en terme de taille de la classe par rapport à ce qui est produit par javac
+
+\paragraph{Switch}
+On a de nombreux switch dans le java.
+
+
+On a donc d'une part le switch, et d'autre part le pos++ :
+\begin{itemize}
+    \item aload\_0 \textcolor{blue}{// push la reference de "token"}
+    \item iload\_1 \textcolor{blue}{// push la valeur de "pos"}
+    \item iinc 1 1 \textcolor{blue}{// incrémente de "1" la variable locale "1" (pos)}
+    \item iaload \textcolor{blue}{// pop les 2 dernière valeur de la stack pour push la i-ème (n-1) case du tableau (n-2), en l'occurence token[pos]}
+\end{itemize}
+~\\
+lookupswitch \{
+\begin{itemize}
+    \item[] (val\_X): (pos\_label\_X) \textcolor{blue}{// correspond aux "case"}
+        \item[] (val\_Y): (pos\_label\_Y) \textcolor{blue}{// exemple : "65: 42" si le goto pour la lettre 'A' (65) est l'instruction numéro 42}
+    \item[]                     ...
+    \item[] default: (ERR) \textcolor{blue}{// default: return -1}
+\end{itemize}
+\}
+
+== Incrément du total ==
+Lorsque le poids d'un arc est != 0, on fait en java : result+=21.0f;
+
+On va remplacer ça par :
+\begin{itemize}
+    \item[] fload\_2  \textcolor{blue}{// push "result"}
+    \item[] (
+    \item[] fconst\_1 \textcolor{blue}{// si le poids est 1}
+    \item[] \#\# OR \#\#
+    \item[] ldc \#N  \textcolor{blue}{// sinon, et il faut ajouter cela dans la constant pool si ce n'est pas déjà présent}
+    \item[] )
+    \item[] fadd  \textcolor{blue}{// additionne les deux dernières valeurs de la stack et push le result}
+    \item[] fstore\_2 \textcolor{blue}{// save le résultat}
+\end{itemize}
+
+\paragraph{State finaux}
+Lorsque l'on est sur un state final, on fait en java : return (pos != token.length) ? -1 : result;
+
+On va utiliser notre (ERR) pour factoriser le code :
+\begin{itemize}
+    \item iload\_1  \textcolor{blue}{// push la valeur de "pop"}
+    \item aload\_0  \textcolor{blue}{// push la référence de "token"}
+    \item arraylength  \textcolor{blue}{// pop et push la taille de "token"}
+    \item if\_cmpne (ERR) \textcolor{blue}{// si (pos != token.length) goto (ERR)}
+    \item fload\_2  \textcolor{blue}{// push la valeur de "result"}
+        \item freturn \textcolor{blue}{// retourne la valeur au sommet de la stack}
+    \end{itemize}
+
 \newpage
 \section{Analyse}
 
