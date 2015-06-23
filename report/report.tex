@@ -402,26 +402,89 @@ Ababdeh & 10 \\
 \clearpage
 \section{Idées d'amélioration et difficultés insurmontables}
 
+Nous disposions à présent d'un algorithme perfectible mais utilisable qui permettait
+de créer de grands FST. Nous avions aussi un moyen de générer du code Java pour
+parcourir la FST donnée en argument. Le gros du travail commençait : utiliser ces outils
+pour tester dans des conditions plus proches de celles réelles.
+
 \subsection{Idées originelles}
 
 \subsubsection{L'encodage}
 
+Nous pensions au début du projet qu'il serait malin de changer l'encodage des caractères afin
+de contourner les mauvaises performances liées à l'UTF16. Seulement pour des besoins
+d'implémentation algorithmique nous avons très tôt pris la décision de travailler avec des
+entiers plutôt que les charactères unicodes. Cela nécessite une transformation de l'entrée
+avant de l'utiliser, mais cela aurait été nécessaire de toute manière.
+
+
+Nous supposons en ayant fait ce choix avoir gagné en optimisation. Seulement il est
+regrettable que nous n'ayons pas réussi à implémenter l'alogorithme avec des charactères
+ou des string, car cela nous aurait permit de faire un véritable comparatif.
+
 \subsubsection{Le traitement d'un texte en multithreading}
+
+Nous avons très vite pensé à la manière par laquelle nous pourrions utiliser notre classe
+générée avec une grande quantité de texte en entrée.
+Nous avions comme idée de parcourir l'entrée afin d'y dinstinguer les mots (séparés par des
+espaces) et de lancer le parcourt de la FST sur différentes mots en même temps, dans différents thread.
+En effet, en divisant l'entrée et en prenant en compte les performances du Java en
+multi-threading il est imaginable que les performances soient améliorées.
+Hélas nous n'avons pas arrivé à cette étape à cause des difficultés à venir.
 
 \subsection{Les difficultés les plus grandes}
 
 \subsubsection{Compilation à la volée}
 
-\subsubsection{Méthodes Java et la limitation 64KB}
+Afin d'automatiser le process de génération puis utilisation de classe, il est nécessaire
+de la compiler. Seulement cela n'est pas simple en Java.
+Nous avons essayé d'utiliser une des librairies fournies par Google pour le faire
+mais nous n'avons pas réussi à la faire fonctionner correctement.
+
+De plus, même compilée il nous fallait ensuite utiliser la reflexivité pour utiliser la
+classe. Si bien que nous avions décidé de nous diriger vers le bytecode le plus vite possible
+afin de contourner ce problème de compilation.
+
+\subsubsection{Méthodes Java et la limitation 64Ko}
+
+Lorsque nous commencions à tester le code généré avec des entrées beaucoup plus grandes
+(un vrai dictionnaire avec quelques dizaines de millions d'entrée) notre première
+surprise fût la taille de la classe générée : 129Mo. Plutôt gros pour du fichier texte.
+Avant même d'aller plus loin nous étions très déçus de cette découverte sachant que dans le
+projet Lucène 8 millions de mots occupaient 90Mo.
+
+
+Mais notre plus mauvaise surprise eu lieu lors de la compilation. Nous nous attendions
+à ce qu'il y ait une limite de la taile d'une classe ou méthode en Java et appréhendions
+le résultat de cette compilation. Mais lorsque le compilateur nous dit explicitement
+qu'une méthode ne pouvait pas dépasser 64Ko (ce que sera confirmé plus tard par de la lecture de documentions diverses) l'information était difficile à croire pour nous.
+Une grande désillusion. Et pourtant nous n'étions pas au bout de nos peines.
+
+
+En effet, de par la très grande variété de caractères présents dans les textes aujourd'hui
+nous pouvions nous attendre à nous approcher de cette limite dès le premier switch, voir la
+dépasser avant même d'avoir écrit la première imbrication!
+
+
+Nous avons décidé de continuer malgré cette problématique qui semblait sans solution viable
+dans tous les cas de figure afin de pouvoir étudier d'autres aspects du projet. Nous avons
+donc changé la génération afin qu'une méthode soit créée à chaque 'case' d'un switch.
+L'objectif est évident : réduire la taille des méthodes. Cette méthode utilisée est inspirée
+de celle du "trampolining" avec une différence très importance : nous n'avons pas un seul
+switch qui comporte beaucoup de cas différents. Nous avons une multitude de switch imbriqués
+les uns dans les autres comportant de très nombreux cas différents.
+
+
+Le code est présent dans le \autoref{lst:javagen3}. Il fonctionne très bien pour des cas
+allant jusqu'à 10K mots, puis à partir de 100K mots, le temps peut varier de 1 à 2 minutes
+à trop long pour qu'on attende considéré infini. Nous n'avons pas trouvé l'origine de ce
+comportement et pire : nous n'avons pas la moindre idée de ce qui pourrait en être à
+l'origine sinon un problème de taille mémoire...
 
 \subsubsection{Le bytecode et la librairie asm}
 
 \newpage
 \section{Analyse}
-
-\newpage
-\section*{Conclusion}
-\addcontentsline{toc}{section}{\protect\numberline{}Conclusion}
 
 \newpage
 \appendix
@@ -563,6 +626,9 @@ Les
 
 \lstinputlisting[style=customjava, caption=Code Java générant une structure switch, label=lst:javagen2]{../java/src/main/java/generator/FstGenerator.java}
 
+\clearpage
 \subsection{Dans différentes méthodes}
+
+\lstinputlisting[style=customjava, caption=Code Java générant une structure switch avec fonctions, label=lst:javagen3]{../java/src/main/java/generator/BigFstGenerator.java}
 
 \end{document}
