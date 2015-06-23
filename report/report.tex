@@ -604,6 +604,19 @@ On va utiliser notre (ERR) pour factoriser le code :
         \item freturn \textcolor{blue}{// retourne la valeur au sommet de la stack}
     \end{itemize}
 
+\paragraph{Résultats}
+~\\
+Malgré tous nos efforts nous n'avons pas réussi à implémenter la génération en bytecode.
+Nous n'avons pas réussi à maîtriser la bibliothèque ASM, par manque de documentation,
+d'expertise mais aussi de contrôle! Nous avons été en effet extrêmement surpris d'avoir
+si peu de contrôle sur les variables ou sur les structures dans le bytecode, ce qui
+nous a beaucoup frustré.
+
+Nous espérions que l'expérience accumulée en générant de l'assembleur nous serait utile mais
+elle ne l'a pas été car ce sont contre les outils même de manipulation de la JVM que nous
+nous sommes échoués. Il est étrange qu'il soit plus simple de générer de l'assembleur
+x86 que du code pour une Machine Virtuelle.
+
 \newpage
 \section{Analyse}
 
