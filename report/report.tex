@@ -476,10 +476,16 @@ les uns dans les autres comportant de très nombreux cas différents.
 
 
 Le code est présent dans le \autoref{lst:javagen3}. Il fonctionne très bien pour des cas
-allant jusqu'à 10K mots, puis à partir de 100K mots, le temps peut varier de 1 à 2 minutes
-à trop long pour qu'on attende considéré infini. Nous n'avons pas trouvé l'origine de ce
+allant jusqu'à 100K mots : 1s pour 10K, 20s pour 30K, 1mn pour 50K ;
+puis à partir de 100K mots, le temps peut varier de 2 minutes
+à trop long, considéré infini. Nous n'avons pas trouvé l'origine de ce
 comportement et pire : nous n'avons pas la moindre idée de ce qui pourrait en être à
 l'origine sinon un problème de taille mémoire...
+
+
+Mais nous étions malgré tout cela satisfait d'avoir su contourner ce problème. Jusqu'à ce
+qu'on étudie le bytecode de très près et comprenne le prix en Java de la création d'une
+méthode.
 
 \subsubsection{Le bytecode et la librairie asm}
 
