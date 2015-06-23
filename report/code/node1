@@ -1,0 +1,10 @@
+NODE_7 :
+    switch(token[pos++i]) {
+        case 'X' :
+            total += 6;
+            goto NODE_21;
+        case 'Y' :
+            goto NODE_42;
+        default :
+            return -1;
+    }
