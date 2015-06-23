@@ -262,15 +262,159 @@ Les différents codes se situent en annexe,annexe \autoref{sec:annexe:shell:asm}
 \end{itemize}
 
 \newpage
-\subsection{Adopter le travail précédent en Java}
+\subsection{Adapter le travail précédent en Java}
+
+Ici le travail fait précédemment avec la génération d'un fichier C s'est montré être très
+utile. En effet cette étape a été traversée en quelques heures sans difficulté particulière.
+
+
+Il nous suffit de séparer en trois cas l'étude d'un n\oe ud et de créer une méthode
+particulière pour gérer intelligemment chaque cas. Le code est ajouté progressivement
+dans un StringBuffer avant d'être retourné (pour être imprimé en console ou
+dans un fichier).
+
+Néanmoins cette étape ne fût absolument pas inutile puisqu'elle permit avec un cas simple
+de s'essayer à la génération d'une classe en Java. Seulement elle ne convenait pas tout
+à fait puisque nous avions recréé une manière de recréer des états et ce n'est pas
+ce que nous voulions.
+
+Finalement nous avions obtenu le code présent en annexe dans le \autoref{lst:javagen1}.
 
 \subsection{Générer une structure de switch imbriqués en Java}
+
+Le code précédent nous permit de prendre confiance à propos de le génération de code en Java.
+Mais il s'agissait à présent de générer une structure en switch afin de s'approcher du
+sujet.
+
+
+Cette fois nous avons rencontré de nombreuses difficultés à cause d'une problématique
+qui allait nous poursuivre pendant tout le projet : les switch ne sont pas voisins mais
+imbriqués les uns dans les autres.
+Ceci complexifia le problème mais nous avions finalement réussi grâce à un peu d'astuce
+et des souvenirs de nos cours de programmation en A1 à écrire une méthode récursive
+qui remplissait le StringBuffer au fur et à mesure et fermait en remontant dans la
+stack les blocs ouverts.
+
+Il nous fallu aussi prendre en compte le cas supplémentaire suivant : un état final n'étant
+pas au bout de l'arbre de la FST (exemple : pour 'arbre' et 'arbres' le parcours du dit
+arbre est le même excepté que pour 'arbre' l'état final est sur le e). Nous n'y avions pas
+pensé auparavant et ce fut sources de bugs difficiles à identifier jusqu'à ce que
+nous comprenions notre erreur.\newline
+
+
+Le code final utilisé pour la génération se trouve dans le \autoref{lst:javagen2}.
 
 \newpage
 \section{Générer une FST}
 
+\subsection{Le besoin}
+
+Avant de compiler nos FST, il nous faut bien sûr les construire à partir de données
+d'entrée et de données de sortie. Seulement pour faire des tests d'envergure nous
+ne pouvions plus les construire à la main. Il nous fallait les construire automatiquement.
+
+Pour ce faire, nous avons décidé d'utiliser un algorithme de construction directe de "Minimal acyclic subsequential transducers". Il s'agit de l'algorithme utilisé dans le projet Apache Lucene, pour la construction de leurs FST. Il permet de construire des transducteurs minimums pour des entrées et sorties données. Nous pouvons donc avoir des données de la forme :
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        In & Out \\
+        \hline
+        John & 1 \\
+        Moth & 2 \\
+        Mob & 3 \\
+        \hline
+    \end{tabular}
+    \caption{Exemple de dictionaire}
+    \label{tab:exemple1}
+\end{table}
+
+Note : Les mots en entrées doivent être triés dans l'ordre lexicographique pour
+que l'algorithme fonctionne.
+
+Cet algorithme nous permet d'être certain que le FST construit associera de manière unique la sortie 1 au mot John, la sortie 2 au mot Moth et la sortie 3 au mot Mob. Et ce même pour des millions d'entrées de cette forme.
+
+De plus, étant utilisé par Lucene, cela nous permettra d'avoir une équivalence entre les FST que nous construisons et ceux construits par Lucene, afin qu'il soit possible de comparer les performances de notre méthode et celle de Lucene.
+
+\subsection{Fonctionnement de l'algorithme}
+
+L'algorithme est issu d'un papier de recherche qui date de 2001, écrit par Denis Maurel et Stoyan Mihov.
+Il fonctionne pour tout type de données d'entrée/sortie, mais nous l'avons adapté en fixant pour sorties sont des nombres entiers par souci de simplicité (et nous le supposons de performance mais n'en avons pas de preuve).
+L'algorithme parcourt les mots en entrée un par un, et cherche un préfixe commun entre le mot actuel et le mot du tour de boucle précédent. En déterminant ce préfixe commun, il est ensuite possible de réutiliser des états qui auraient déjà été créés lors du traitement d'un mot précédent (un peu comme dans un jeu de Scrabble). Petit à petit, on arrive donc à construire un Trie correct et à s'assurer que la valeur de sortie de chaque chaîne est unique.
+
+
+\href{http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.24.3698}{Direct Construction of Minimal Acyclic Subsequential Transducers (2001)}
+
+\subsection{Difficultés}
+
+Il nous a été très difficile de comprendre le pseudo code et de l'implémenter correctement.
+Nous avons du lors des premiers essais traverser de très nombreuses erreurs qui
+ne nous permettaient pas d'avancer suffisemment. Finalement nous n'avons pas eu d'autre
+choix que de l'implémenter en tout trois fois, en essayant à chaque fois d'avoir plus
+de recul. Nous avons vraiment travaillé tous les trois ensemble sur le compréhension
+(et non l'implémentation) par nécessité afin de pouvoir profiter des interprétations
+de tous pour pouvoir avancer.
+
+
+Aujourd'hui malgré tous nos efforts l'algorithme n'est pas entièrement fonctionnel :
+\begin{itemize}
+    \item Les états ne sont pas restitutés dans le bon ordre (bug mineur)
+    \item Les poids ne sont pas correctement distribués sur tous les arcs, particulièrement lorsque les états finaux ne sont pas en bout de branche (bug majeur).
+\end{itemize}
+
+Nous n'avons pas réussi à déterminer l'origine de ces bugs.
+
+\subsection{Résultat}
+
+Pour le dictionnaire suivant :
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        In & Out \\
+        \hline
+        A      &  1 \\
+        Aani   &  2 \\
+        Aaron  &  3 \\
+        Aaronic&  4 \\
+        Aaronical      &  5 \\
+        Aaronite       &  6 \\
+        Aaronitic      &  7 \\
+        Aaru   &  8 \\
+        Ab     &  9 \\
+Ababdeh & 10 \\
+        \hline
+    \end{tabular}
+    \caption{Dictionaire utilisé pour tester l'algorithme}
+    \label{tab:exemple2}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.35]{algofst.png}
+    \caption{La FST associée avec le \autoref{tab:exemple2} générée par l'algorithme}
+    \label{fig:algo:fstgen}
+\end{figure}
+
 \newpage
-\section{Générer une structure switch en bytecode}
+\clearpage
+\section{Idées d'amélioration et difficultés insurmontables}
+
+\subsection{Idées originelles}
+
+\subsubsection{L'encodage}
+
+\subsubsection{Le traitement d'un texte en multithreading}
+
+\subsection{Les difficultés les plus grandes}
+
+\subsubsection{Compilation à la volée}
+
+\subsubsection{Méthodes Java et la limitation 64KB}
+
+\subsubsection{Le bytecode et la librairie asm}
 
 \newpage
 \section{Analyse}
@@ -408,6 +552,16 @@ Les
 \section{Annexe : générer du code java dynamiquement}
 
 \subsection{Dans une seule méthode}
+
+\subsubsection{Avec différents états représentés par des méthodes}
+
+
+\lstinputlisting[style=customjava, caption=Code Java générant une structure avec des n\oe uds, label=lst:javagen1]{code/FstGeneratorFirstVersion.java}
+
+\clearpage
+\subsubsection{Uniquement avec des switch}
+
+\lstinputlisting[style=customjava, caption=Code Java générant une structure switch, label=lst:javagen2]{../java/src/main/java/generator/FstGenerator.java}
 
 \subsection{Dans différentes méthodes}
 

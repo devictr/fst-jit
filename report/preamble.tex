@@ -81,11 +81,38 @@
     }
     \fi
 }
+
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+
+\lstdefinestyle{customjava} {
+    language=Java,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{javapurple}\bfseries,
+    stringstyle=\color{javared},
+    commentstyle=\color{javagreen},
+    morecomment=[s][\color{javadocblue}]{/**}{*/},
+    numbers=left,
+    belowcaptionskip=1\baselineskip,
+    captionpos=b,
+    breaklines=true,
+    frame=L,
+    xleftmargin=\parindent,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    tabsize=4,
+    showspaces=false,
+    showstringspaces=false
+}
+
 \makeatother
 
 \lstdefinestylecustom{custombash}{bash}{}
 \lstdefinestylecustom{customc}{C}{}
 \lstdefinestylecustom{customasm}{Assembler}{x86masm}
+
 
 \usepackage[pdftex,breaklinks,linktocpage,unicode]{hyperref}
 \hypersetup{
